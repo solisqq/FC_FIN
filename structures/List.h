@@ -1,0 +1,79 @@
+#pragma once
+#ifndef LIST_H
+#define LIST_H
+
+template<class Type>
+class List {
+public:
+    class Node {
+    public:
+        Type val;
+        Node(){}
+        Node(Type v):val(v){}
+        Node* next = nullptr;
+        Node* prev = nullptr;
+    };
+    Node *front = nullptr, *back = nullptr;
+    int Count=0;
+    List(){}
+    void pushFront(Type value) {
+        Count++;
+        if(front==nullptr) {
+            front = back = new Node(value);
+            return;
+        }
+        Node* newItem = new Node(value);
+        newItem->next = front;
+        front->prev = newItem;
+        front = newItem;
+    }
+    void pushBack(Type value) {
+        Count++;
+        if(front==nullptr) {
+            front = back = new Node(value);
+            return;
+        }
+        Node* newItem = new Node(value);
+        newItem->prev = back;
+        back->next = newItem;
+        back = newItem;
+    }
+    void popBack() {
+        if(Count<=0) return;
+        Count--;
+        if(Count==1) {
+            delete front;
+            front = nullptr;
+            return;
+        }
+        Node* backup = back;
+        backup->prev->next = nullptr;
+        back = backup->prev;
+        delete backup;
+    }
+    void popFront() {
+        if(Count<=0) return;
+        Count--;
+        if(Count==1) {
+            delete front;
+            front = nullptr;
+            return;
+        }
+        front->next->prev = nullptr;
+        Node* backup = front->next;
+        delete front;
+        front = backup;
+    }
+    Node* top() { return front;}
+    Node* last() { return back;}
+    Type topVal() {
+        if(Count==0) return 0;
+        return front->val;
+    }
+    Type backVal() {
+        if(Count==0) return 0;
+        return back->val;
+    }
+};
+
+#endif

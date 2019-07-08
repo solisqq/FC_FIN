@@ -1,6 +1,13 @@
+#pragma once
+#ifndef FILTER_H
+#define FILTER_H
+
 template <class Type>
 class Filter {
+public:
 	Type *val;
-	virtual void Config(Type *value, float param1=-1.0f, float param2=-1.0f) = 0;
+	void SetVal(Type *_val) {val = _val;}
 	virtual void Update() = 0;
 };
+
+#endif
