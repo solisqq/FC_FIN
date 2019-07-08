@@ -1,6 +1,12 @@
 #include "main/startup.h"
-#include "./interfaces/FilterableValue.h"
 
+void setup() {initialize();}
 void loop(){
-
+	
 }
+
+
+
+
+
+
