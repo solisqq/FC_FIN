@@ -1,9 +1,7 @@
-#include "main/startup.h"
+#include "main/mainLoop.h"
 
 void setup() {initialize();}
-void loop(){
-	
-}
+void loop(){mainLoop();}
 
 
 

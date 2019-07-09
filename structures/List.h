@@ -7,16 +7,16 @@ class List {
 public:
     class Node {
     public:
-        Type val;
+        Type *val;
         Node(){}
-        Node(Type v):val(v){}
+        Node(Type *v):val(v){}
         Node* next = nullptr;
         Node* prev = nullptr;
     };
     Node *front = nullptr, *back = nullptr;
     int Count=0;
     List(){}
-    void pushFront(Type value) {
+    void pushFront(Type *value) {
         Count++;
         if(front==nullptr) {
             front = back = new Node(value);
@@ -27,7 +27,7 @@ public:
         front->prev = newItem;
         front = newItem;
     }
-    void pushBack(Type value) {
+    void pushBack(Type *value) {
         Count++;
         if(front==nullptr) {
             front = back = new Node(value);
@@ -66,14 +66,6 @@ public:
     }
     Node* top() { return front;}
     Node* last() { return back;}
-    Type topVal() {
-        if(Count==0) return 0;
-        return front->val;
-    }
-    Type backVal() {
-        if(Count==0) return 0;
-        return back->val;
-    }
 };
 
 #endif

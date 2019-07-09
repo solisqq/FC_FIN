@@ -9,8 +9,6 @@ class SimpleIR : public Filter<Type> {
 private:
     float low=0.0;
     float high=0.0;
-
-    Type prev=0.0;
 public:
     SimpleIR(float strength) {CalcStr(strength);}
     SimpleIR(Type *value, float strength) {

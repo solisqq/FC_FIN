@@ -1,8 +1,9 @@
 #include "Filter.h"
 #include "../structures/List.h"
+#include "../infac/AllowPrint.h"
 
 template <class Type>
-class FilterableValue {
+class FilterableValue: public AllowPrint {
 public:
 	Type value;
 	FilterableValue(){value=0;}
@@ -10,13 +11,14 @@ public:
 	void update(Type val) {
 		typename List<Filter<Type>>::Node *current = filters.front;
 		
-		for(int i=0; i<filters.Count; i++) {
+		while(current!=nullptr) {
+			current->val->update(val);
 			current = current->next;
-			current.update();
 		}
 	}
-	void addFilter(Filter<Type>& filter) {
-		filter.val = *value;
+	void addFilter(Filter<Type>* filter) {
+		filter->filtered = &value;
 		filters.pushBack(filter);
 	}
+	virtual String toString() {return static_cast<String>(value);}
 };
