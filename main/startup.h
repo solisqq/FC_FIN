@@ -5,5 +5,5 @@
 
 void initialize(){
 	Point3D<float> somePoint;
-	somePoint.x.addFilter(SimpleIR());
+	//somePoint.x.addFilter(SimpleIR());
 }

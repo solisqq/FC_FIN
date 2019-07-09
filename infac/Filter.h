@@ -5,9 +5,9 @@
 template <class Type>
 class Filter {
 public:
-	Type *val;
-	void SetVal(Type *_val) {val = _val;}
-	virtual void Update() = 0;
+	Type *filtered;
+	void setVal(Type *_val) {filtered = _val;}
+	virtual void update(Type newVal) = 0;
 };
 
 #endif
