@@ -3,12 +3,16 @@
 #define DEBUG_H
 
 #include "../../infac/DebugItem.h"
+#include "../../structures/List.h"
+#include "../Output/Output.h"
 
 class Debug {
 public:
-    static void switchState(DebugItem *item) {
-        item->
-    }
+    List<DebugItem*> items;
+    Debug();
+    void Show();
 };
+
+#include "Debug.cpp"
 
 #endif

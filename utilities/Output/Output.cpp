@@ -17,3 +17,7 @@ void Output::printLine(const AllowPrint &printable){
     Output::print(printable);
     Serial.print(Output::newLine);
 }
+
+void Output::printLine(const String &text){
+    Serial.println(text);
+}

@@ -3,13 +3,10 @@
 #define DEBUGITEM_H
 
 class DebugItem {
-private:
-    bool state;
+protected:
+    virtual String getClassName() = 0;
 public:
-    void debugOn() { state = true; } 
-    void debugOff() { state = false; } 
-    void switchState() { state = !state; } 
-    virtual String getDebugMsg(bool raw=false) = 0;
+    virtual String getDebugMsg(bool raw=false) = 0; 
 };
 
 #endif

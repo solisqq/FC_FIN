@@ -64,6 +64,26 @@ public:
         delete front;
         front = backup;
     }
+    bool remove(const Type &_val) {
+        Node *current = front;
+        while(current!=nullptr) {
+            if(current->val==_val) {
+                if(current==front) {
+                    popFront();
+                    return true;
+                }
+                if(current==back) {
+                    popBack();
+                    return true;
+                }
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
     Node* top() { return front;}
     Node* last() { return back;}
 };

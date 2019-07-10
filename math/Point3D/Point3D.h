@@ -55,6 +55,7 @@ public:
 		if(!raw) return toString();
 		else return ""+x.toString()+Output::coma+y.toString()+Output::coma+z.toString();
 	}
+	virtual String getClassName() {return "Point3D";}
 };
 
 #endif
