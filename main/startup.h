@@ -11,7 +11,7 @@ long randNumberY;
 long randNumberZ;
 
 void initialize(){
-	Serial.begin(115200);
+	Output::initialize();
 	delay(10);
 	Serial.println("cs");
 	somePoint.x.addFilter(new SimpleIR<int>(0.98));

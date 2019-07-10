@@ -5,22 +5,18 @@
 #include "../../infac/FilterableValue.h"
 #include "../../infac/AllowPrint.h"
 #include "Vector.h"
+#include "../../infac/DebugItem.h"
 
 #define FOR_EACH_NOBR for(int i=0;i<3;i++)
 #define FOR_EACH_BR for(int i=0;i<3;i++) {
 
 template<class Type>
-class Point3D : public AllowPrint {
+class Point3D : public AllowPrint, DebugItem {
 public:
 	enum Var {X=0,Y=1,Z=2};
 	FilterableValue<Type> x,y,z;
 	Point3D() {}
 	Point3D(Type X, Type Y, Type Z):x(X),y(Y),z(Z) {}
-	void Set(Var var, Type val) {
-		if(var==Var::X) x = val;
-		else if(var==Var::Y) y = val;
-		else z = val;
-	}
 	void update(Var var, Type val) {
 		if(var==Var::X) x.update(val);
 		else if(var==Var::Y) y.update(val);
@@ -54,6 +50,10 @@ public:
 			y.toString()+Output::coma+
 			z.toString()+Output::bracketEnd
 		;
+	}
+	virtual String getDebugMsg(bool raw=false) {
+		if(!raw) return toString();
+		else return ""+x.toString()+Output::coma+y.toString()+Output::coma+z.toString();
 	}
 };
 

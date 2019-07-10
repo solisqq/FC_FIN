@@ -3,7 +3,7 @@
 
 void mainLoop()
 {
-    if (timer.IsReady())
+     if (timer.IsReady())
     {
         randNumberX = random(300);
         randNumberY = random(300);

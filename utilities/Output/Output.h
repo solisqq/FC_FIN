@@ -10,6 +10,8 @@ public:
     static String newLine;
     static String bracketEnd;
     static String bracketBegin;
+    static long baudRate;
+    static void initialize();
     static void print(const AllowPrint &printable);
     static void printLine(const AllowPrint &printable);
 private:

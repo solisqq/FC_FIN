@@ -7,9 +7,9 @@ class FilterableValue: public AllowPrint {
 public:
 	Type value;
 	FilterableValue(){value=0;}
-	List<Filter<Type>> filters;
+	List<Filter<Type>*> filters;
 	void update(Type val) {
-		typename List<Filter<Type>>::Node *current = filters.front;
+		typename List<Filter<Type>*>::Node *current = filters.front;
 		
 		while(current!=nullptr) {
 			current->val->update(val);

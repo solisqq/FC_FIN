@@ -6,7 +6,7 @@
 #define FOR_ALL_VECTORS for(int i=0;i<3;i++)
 
 template <class Type> 
-class Vector
+class Vector : public AllowPrint
 {
 public:
    	Type x,y,z;
@@ -19,7 +19,12 @@ public:
    		return inverted;
    	}
    	Vector<Type> toRadians() {return (*this)*RAD_MULTI;}
-   	String toString() {return (String)x+" "+(String)y+" "+(String)z;}
+   	virtual String toString() {
+		   return "Vector("+
+		   (String)x+Output::coma+
+		   (String)y+Output::coma+
+		   (String)z+Output::bracketEnd;
+	}
    	Type& operator[] (int i) {
         if(i<1) return this->x;
         if(i>1) return this->z;
