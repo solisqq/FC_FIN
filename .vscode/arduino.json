@@ -1,4 +1,6 @@
 {
-    "board": "arduino:avr:uno",
-    "sketch": "FC_FIN.ino"
+    "board": "arduino:avr:nano",
+    "sketch": "FC_FIN.ino",
+    "configuration": "cpu=atmega328old",
+    "port": "COM8"
 }

@@ -14,6 +14,7 @@ public:
     static void initialize();
     static void print(const AllowPrint &printable);
     static void printLine(const AllowPrint &printable);
+    static void printLine(const String &text);
 private:
     Output();
 };

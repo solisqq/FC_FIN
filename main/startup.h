@@ -4,11 +4,13 @@
 #include "../filters/SimpleIR.h"
 #include "../math/Point3D/Point3D.h"
 #include "../utilities/Timer/Timer.h"
+#include "../utilities/CommandSystem/CommandSystem.h"
 
 Debug debugger;
 
 Timer debugTimer;
 Point3D<int> somePoint;
+CommandSystem cmd;
 long randNumberX;
 long randNumberY;
 long randNumberZ;
@@ -22,4 +24,6 @@ void initialize(){
 	somePoint.z.addFilter(new SimpleIR<int>(0.85));
 	randomSeed(analogRead(0));
 	debugTimer.Init(30);
+	cmd.setDebugOnCMD(debugger, somePoint, "debug");
 }
+

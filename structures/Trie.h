@@ -1,8 +1,7 @@
 #pragma once
 #ifndef TRIE_H
 #define TRIE_H
-
-#include <string>
+#include <WString.h>
 
 template <class Type>
 class Trie {
@@ -28,23 +27,26 @@ public:
     };
 	Node* core = nullptr;
 	Trie(){}
+	void Insert(const String &value, Type _val) {
+		Insert(core, value, _val);
+	}
 	void Insert(Node* to, String value, Type _val) {
 		int textSize = value.length();
 		if (textSize <= 0) return;
 		if (core == nullptr) {
-			core = new Node(0, false);
+			core = new Node(0, false, _val);
 			to = core;
 		}
 		if (to->Child == nullptr) {
-			to->Child = new Node(value[0]);
+			to->Child = new Node(value[0], _val);
 			if (textSize == 1) to->Child->isLeaf = true;
-			else Insert(to->Child, value.substr(1, textSize - 1));
+			else Insert(to->Child, value.substring(1, textSize - 1),_val);
 		}
 		else {
 			Node *prev = nullptr;
 			Node *current = to->Child;
 			Node *father = to;
-			Node *toAdd = new Node(value[0]);
+			Node *toAdd = new Node(value[0],_val);
 
 			while (current != nullptr) {
 				if (toAdd->value < current->value) {
@@ -57,13 +59,13 @@ public:
 						toAdd->next = current;
 					}
 					if (textSize == 1) toAdd->isLeaf = true;
-					else Insert(toAdd, value.substr(1, textSize - 1));
+					else Insert(toAdd, value.substring(1, textSize - 1),_val);
 					return;
 				}
 				else if (toAdd->value == current->value) {
 					delete toAdd;
 					if (textSize == 1) current->isLeaf = true;
-					else Insert(current, value.substr(1, textSize - 1));
+					else Insert(current, value.substring(1, textSize - 1),_val);
 					return;
 				}
 				prev = current;
@@ -72,12 +74,12 @@ public:
 			if (prev != nullptr) {
 				prev->next = toAdd;
 				if (textSize == 1) toAdd->isLeaf = true;
-				else Insert(toAdd, value.substr(1, textSize - 1));
+				else Insert(toAdd, value.substring(1, textSize - 1),_val);
 				return;
 			}
 		}
 	}
-	Type* Find(String word) {
+	Type Find(String word) {
 		Node* result = nullptr;
 		if (core == nullptr) return nullptr;
 		Node* current = core->Child;
@@ -87,7 +89,7 @@ public:
 			current = result->Child;
 		}
         if(result==nullptr) return nullptr;
-		return *result->val;
+		return result->val;
 	}
 };
 

@@ -11,7 +11,7 @@
 #define FOR_EACH_BR for(int i=0;i<3;i++) {
 
 template<class Type>
-class Point3D : public AllowPrint, DebugItem {
+class Point3D : public AllowPrint, public DebugItem {
 public:
 	enum Var {X=0,Y=1,Z=2};
 	FilterableValue<Type> x,y,z;
