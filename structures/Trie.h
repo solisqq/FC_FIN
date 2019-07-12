@@ -40,7 +40,7 @@ public:
 		if (to->Child == nullptr) {
 			to->Child = new Node(value[0], _val);
 			if (textSize == 1) to->Child->isLeaf = true;
-			else Insert(to->Child, value.substring(1, textSize - 1),_val);
+			else Insert(to->Child, value.substring(1, textSize),_val);
 		}
 		else {
 			Node *prev = nullptr;
@@ -59,13 +59,13 @@ public:
 						toAdd->next = current;
 					}
 					if (textSize == 1) toAdd->isLeaf = true;
-					else Insert(toAdd, value.substring(1, textSize - 1),_val);
+					else Insert(toAdd, value.substring(1, textSize),_val);
 					return;
 				}
 				else if (toAdd->value == current->value) {
 					delete toAdd;
 					if (textSize == 1) current->isLeaf = true;
-					else Insert(current, value.substring(1, textSize - 1),_val);
+					else Insert(current, value.substring(1, textSize),_val);
 					return;
 				}
 				prev = current;
@@ -74,7 +74,7 @@ public:
 			if (prev != nullptr) {
 				prev->next = toAdd;
 				if (textSize == 1) toAdd->isLeaf = true;
-				else Insert(toAdd, value.substring(1, textSize - 1),_val);
+				else Insert(toAdd, value.substring(1, textSize),_val);
 				return;
 			}
 		}

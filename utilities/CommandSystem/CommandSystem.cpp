@@ -3,8 +3,8 @@ void CommandSystem::setDebugOnCMD(Debug &_debugger, DebugItem &_item, const Stri
     commands.Insert(cmd, new DebugAddAction(_debugger, _item));
 }
 bool CommandSystem::doActionOnCMD(const String &cmd) {
-    Action *act = commands.Find("cmd");
-    if(act!=nullptr) {
+    Action *act = commands.Find(cmd);
+    if(isValid(act)) {
         act->execute(nullptr);
         return true;
     }
