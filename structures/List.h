@@ -78,6 +78,7 @@ public:
                 }
                 current->prev->next = current->next;
                 current->next->prev = current->prev;
+                Count--;
                 return true;
             }
             current = current->next;

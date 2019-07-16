@@ -5,10 +5,14 @@
 #include "../math/Point3D/Point3D.h"
 #include "../utilities/Timer/Timer.h"
 #include "../utilities/CommandSystem/CommandSystem.h"
+#include "Receiver.h"
 
 Debug debugger;
 
 Timer debugTimer;
+Timer rxTimer;
+
+Receiver rx;
 Point3D<int> somePoint;
 CommandSystem cmd;
 long randNumberX;
@@ -24,6 +28,9 @@ void initialize(){
 	somePoint.z.addFilter(new SimpleIR<int>(0.85));
 	randomSeed(analogRead(0));
 	debugTimer.Init(30);
+	rxTimer.Init(20);
+	rx.initialize(21);
 	cmd.setDebugOnCMD(debugger, somePoint, "debug");
+	cmd.setDebugOnCMD(debugger, rx, "receiver");
 }
 

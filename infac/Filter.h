@@ -5,7 +5,7 @@
 template <class Type>
 class Filter {
 public:
-	Type *filtered;
+	volatile Type *filtered;
 	void setVal(Type *_val) {filtered = _val;}
 	virtual void update(Type newVal) = 0;
 };
