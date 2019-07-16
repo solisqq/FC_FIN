@@ -9,7 +9,7 @@
 template <class Type>
 class FilterableValue: public AllowPrint {
 public:
-	volatile Type value;
+	Type value;
 	FilterableValue(){value=0;}
 	List<Filter<Type>*> filters;
 	void update(Type val) {
@@ -18,15 +18,22 @@ public:
 			return;
 		}
 		typename List<Filter<Type>*>::Node *current = filters.front;
-		
-		while(current!=nullptr) {
-			current->val->update(val);
+		if(current!=nullptr) {
+			filters.front->val->update(val);
 			current = current->next;
+
+			while(current!=nullptr) {
+				current->val->update(current->prev->val->filtered);
+				current = current->next;
+			}
+			value = filters.back->val->filtered;
 		}
 	}
 	void addFilter(Filter<Type>* filter) {
-		filter->filtered = &value;
 		filters.pushBack(filter);
+	}
+	void addFilter(List<Filter<Type>*> filter) {
+		filters.Union(filter);
 	}
 	virtual String toString() {return static_cast<String>(value);}
 };

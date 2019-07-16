@@ -5,7 +5,7 @@ void mainLoop()
 {
     if(debugTimer.IsReady()) 
         debugger.Show();
-    if(rxTimer.IsReady)
+    if(rxTimer.IsReady())
         rx.update(); 
 
     if(Serial.available()) {

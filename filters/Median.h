@@ -20,13 +20,16 @@ public:
     }
     virtual void update(Type newVal) {
         if(values.Count<count) {
-            *Filter<Type>::filtered = newVal;
+            Filter<Type>::filtered = newVal;
             values.pushBack(newVal);
             return;
         }
-        if(values.Count<4) medianSmall();
         values.popFront();
         values.pushBack(newVal);
+        if(values.Count<4) {
+            Filter<Type>::filtered = medianSmall();
+            return;
+        }
         Type *tab = new Type[count];
         typename List<Type>::Node *current = values.front;
         for(int i=0; i<count; i++) {
@@ -36,31 +39,25 @@ public:
         Algorithms<Type>::quickSort(tab,0,count-1);
         int middle = count/2;
         if(count%2==0) 
-            *Filter<Type>::filtered = (tab[middle-1]+tab[middle])/2.0;
+            Filter<Type>::filtered = (tab[middle-1]+tab[middle])/2.0;
         else 
-            *Filter<Type>::filtered = tab[middle];
+            Filter<Type>::filtered = tab[middle];
         
         
     }
-    int medianSmall(int id) {
+    Type medianSmall() {
         if(count==0) return 0;
         if(count==1) return values.front->val;
         if(count==2) return values.front->val; 
-        
         if(count==3) {
-            int differences[3];
-            differences[0] = ABSOLUTE_DIFFERENCE(values.front->val,values.front->next->val);
-            differences[1] = absabs(values.front->val,values.front->next->next->val);
-            differences[2] = abs(vvalues.front->next->next->val,values.front->next->val);
-            if(differences[0]<differences[1]) {
-                if(differences[0]<differences[2]) return prevRaw[id][0];
-                else return prevRaw[id][2];
-            } else {
-                if(differences[1]<differences[2]) return prevRaw[id][1];
-                else return prevRaw[id][2];
-            }
+            Type vals[3]; 
+            vals[0] = values.front->val;
+            vals[1] = values.front->next->val;
+            vals[2] = values.front->next->next->val;
+            if(vals[0]<vals[1] && vals[0] > vals[2]) return vals[0];
+            if(vals[1]<vals[2] && vals[1] > vals[0]) return vals[1];
+            else return vals[2];
         }
-        
     }
 };
 

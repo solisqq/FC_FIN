@@ -85,8 +85,25 @@ public:
         }
         return false;
     }
+    
     Node* top() { return front;}
     Node* last() { return back;}
+    void Union(List<Type> list) {
+        if(front==nullptr) {
+            front = list.front;
+            back = list.back;
+            Count = list.Count;
+            return;
+        }
+        this->back->next = list.front;
+        list.front->prev = this->back;
+        this->back = list.back;
+        this->Count += list.Count;
+    }
+    List<Type> operator+(Type b) {
+		pushBack(b);
+        return this;
+	}
 };
 
 #endif

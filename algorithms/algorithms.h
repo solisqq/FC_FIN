@@ -2,6 +2,8 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
 #define ABSOLUTE_DIFFERENCE(A,B) ((A-B)<0 ? (-(A-B)): (A-B))
+#include "../structures/List.h"
+
 template <class Type>
 class Algorithms {
 public:
@@ -26,6 +28,5 @@ public:
         if(i<right)
             quickSort(tab,i,right);
     }
-
 };
 #endif
