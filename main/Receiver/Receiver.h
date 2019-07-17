@@ -10,6 +10,7 @@
 #include "../../filters/ClosesTo.h"
 #include "../../filters/SimpleIR.h"
 #include "../../filters/Mapper.h"
+#include "../../filters/ExpHighPass.h"
 #include "Axis.h"
 #include "PPMHandler.h"
 

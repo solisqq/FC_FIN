@@ -3,6 +3,7 @@
 #define OUTPUT_H
 
 #include "../../infac/AllowPrint.h"
+#include "../Exceptions/Exception.h"
 
 class Output {
 public:
@@ -13,6 +14,10 @@ public:
     static long baudRate;
     static void initialize();
     static void print(AllowPrint &printable);
+    static void throwExc(List<Exception> &exceptions, const Exception exc);
+    static void throwExc(const Exception exc);
+    static void succExc(const Exception exc);
+    static void succExc(List<Exception> &exceptions);
     static void printLine(AllowPrint &printable);
     static void printLine(const String &text);
     static void printLine(char ch);

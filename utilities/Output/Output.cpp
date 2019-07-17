@@ -61,3 +61,36 @@ void Output::Show() {
     textToPrintOutput = "";
 }
 
+void Output::throwExc(List<Exception> &exceptions, const Exception exc) {
+    exceptions.pushBack(exc);
+    throwExc(exc);
+}
+
+void Output::throwExc(const Exception exc) {
+    String msg = exc.source;
+    msg+= " throw ";
+    if(exc.type == Exception::Type::Critical) msg += "critical error: ";
+    else if(exc.type == Exception::Type::Warning) msg += "warning: ";
+    else msg += "error: ";
+
+    msg += exc.text;
+    Output::printLine(msg);
+}
+
+void Output::succExc(List<Exception> &exceptions) {
+    if(exceptions.back==nullptr) {
+        Output::printLine("Exception list throw exception (:D).");
+        return;
+    }
+    succExc(exceptions.back->val);
+    //exceptions.popBack();
+}
+
+void Output::succExc(const Exception exc) {
+    String msg = exc.source;
+    if(exc.type == Exception::Type::Critical) msg += " critical error: ";
+    else if(exc.type == Exception::Type::Warning) msg += " warning: ";
+    else msg += " error: '";
+    msg += +"''"+exc.text + "'' has been fixed.";
+    Output::printLine(msg);
+}

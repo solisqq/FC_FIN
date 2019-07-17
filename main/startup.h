@@ -6,6 +6,7 @@
 #include "../utilities/Timer/Timer.h"
 #include "../utilities/CommandSystem/CommandSystem.h"
 #include "Receiver/Receiver.h"
+#include "../utilities/Exceptions/Exception.h"
 
 Debug debugger;
 
@@ -14,6 +15,7 @@ Timer rxTimer;
 
 Receiver rx;
 CommandSystem cmd;
+List<Exception> exceptions;
 
 void initialize(){
 	Output::initialize();
@@ -22,6 +24,11 @@ void initialize(){
 	debugTimer.Init(30);
 	rxTimer.Init(20);
 	rx.initialize(21, 7, 0.8);
+	if(!rx.isActive()) {
+		Exception rxFail = Exception(Exception::Type::Critical, "RX", "No signal");
+		Output::throwExc(rxFail);
+		EXCEPTION_HOLD(rx.isActive(),rxFail);
+	}
 	cmd.setDebugOnCMD(debugger, rx, "receiver");
 }
 
