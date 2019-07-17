@@ -57,6 +57,7 @@ void Output::Append(double toPrint, String valueName,int prec){
 }
 void Output::Show() {
     if(textToPrintOutput!="")
-        Serial.println(textToPrintOutput.substring(0,textToPrintOutput.length()-2));
+        Output::printLine(textToPrintOutput.substring(0,textToPrintOutput.length()-2));
+    textToPrintOutput = "";
 }
 

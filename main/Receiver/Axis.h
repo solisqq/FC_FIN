@@ -8,9 +8,13 @@
 class Axis {
 private:
     FilterableValue<float> filtered;
+    int isSwitch = 0;
 public:
     float get() {
-        return filtered.value;
+        if(isSwitch<1) return filtered.value;
+        if(filtered.value < 0.5) return 0;
+        else if (filtered.value > 1.5) return 2;
+        else return 1;
     }
     void addFilter(Filter<float> *filter) {
         filtered.addFilter(filter);
@@ -19,7 +23,10 @@ public:
         filtered.update(static_cast<float>(toUpd));
     }
     virtual String toString() {
-        return filtered.toString();
+        return static_cast<String>(get());
+    }
+    void setAsSwitch(int states){
+        isSwitch = states;
     }
 };
 
