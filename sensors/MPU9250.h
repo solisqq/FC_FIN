@@ -2,9 +2,9 @@
 #define MPU9250_h
 
 #include <Arduino.h>
-#include "Wire.h"   // I2C library
-#include "SPI.h"     // SPI library
-#include "Vector.h"
+#include <Wire.h>   // I2C library
+#include <SPI.h>     // SPI library
+#include "../math/Point3D/Vector.h"
 #define BME280_SPI_MASK 0x7F
 class MPU9250{
   public:
@@ -299,5 +299,7 @@ class MPU9250FIFO: public MPU9250 {
     float _tFifo[256];
     size_t _tSize;
 };
+
+#include "MPU9250.cpp"
 
 #endif

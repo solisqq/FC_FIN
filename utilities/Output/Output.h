@@ -27,6 +27,7 @@ public:
     static void Append(int toPrint, String valueName = "");
     static void Append(float toPrint, String valueName = "", int prec=3);
     static void Append(double toPrint, String valueName = "",int prec=3);
+    static void info(const String text);
     static void Show();
 
 private:

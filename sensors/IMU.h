@@ -5,7 +5,7 @@
 #include <String>
 #include "MPU9250.h"
 #include "Gyro/Gyro.h"
-#include <SPI>
+
 
 class IMU {
 private:
@@ -14,13 +14,18 @@ private:
 public:
     Gyro gyro;  
     IMU(){}
-    bool initialize(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int, short int MPU_CS) {
+    bool initialize(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS) {
         if(!connect(MPU_SCK, MPU_MOSI, MPU_MISO, MPU_CS)) return false;
         setDefault();
         return true;
     }
+	void update() {
+		Vector<int16_t> gyroData;
+		mpu->readRawGyro(&gyroData);
+		gyro.update(gyroData);
+	}
 private:
-    bool connect(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int, short int MPU_CS) {
+    bool connect(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS) {
 		MPUSPI = new SPIClass();
 		MPUSPI->begin(MPU_SCK,MPU_MOSI,MPU_MISO);
 		mpu = new MPU9250(*MPUSPI, MPU_CS);
@@ -39,6 +44,7 @@ private:
 
 		//gyro.initialize();
 	}
+	
 };
 
 #endif

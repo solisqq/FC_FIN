@@ -17,12 +17,13 @@ void Receiver::initialize(int RTX_PIN, int medianStr, float irStr)
         Channels[i] = &Switch[j];
         Switch[j].setAsSwitch(3);
         Switch[j].addFilter(new ClosesTo<float>(3, 3000.0));
-        Channels[i]->addFilter(new Mapper<float>(2000.0, 1000.0, 0.01, 2.0, false));
+        Channels[i]->addFilter(new Mapper<float>(2000.0, 1000.0, 0.01, 2.0));
         Channels[j]->addFilter(new ExpHighPass<float>(0.3, 10.0));
     }
-    Channels[1]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.4));
-    Channels[2]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.4));
-    Channels[3]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.4));
+    Channels[1]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.7));
+    Channels[2]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.7));
+    Channels[3]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.7));
+    Channels[0]->addFilter(new Mapper<float>(2000.0, 1000.0, 1148.0, 1832.0));
     Switch[1].setAsSwitch(2);
 }
 

@@ -5,12 +5,16 @@ void mainLoop()
 {
     if(debugTimer.IsReady()) 
         debugger.Show();
+
     if(rxTimer.IsReady())
         rx.update(); 
 
+    if(imuTimer.IsReady()) 
+        imu.update();
+
     if(Serial.available()) {
         if(Serial.read()=='a') {
-            cmd.doActionOnCMD("receiver");
+            cmd.doActionOnCMD("gyro");
         }
     }
 }

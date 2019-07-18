@@ -73,7 +73,7 @@ void Output::throwExc(const Exception exc) {
     else if(exc.type == Exception::Type::Warning) msg += "warning: ";
     else msg += "error: ";
 
-    msg += exc.text;
+    msg += exc.text+".";
     Output::printLine(msg);
 }
 
@@ -93,4 +93,8 @@ void Output::succExc(const Exception exc) {
     else msg += " error: '";
     msg += +"''"+exc.text + "'' has been fixed.";
     Output::printLine(msg);
+}
+
+void Output::info(const String text) {
+    Output::printLine("INF: "+text);
 }

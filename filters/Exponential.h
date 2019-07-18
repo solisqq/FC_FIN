@@ -33,7 +33,10 @@ public:
                 calibrate();
             }
         }
-        Filter<Type>::filtered = (powf(newVal-powMidVal-minVal, power)*powRangeMap)/powMidValPowered;
+        Type backup = newVal-powMidVal-minVal;
+        bool wasNegative = backup<0? true : false;
+        Filter<Type>::filtered = (powf(abs(backup), power)*powRangeMap)/powMidValPowered;
+        if(wasNegative) Filter<Type>::filtered = -Filter<Type>::filtered;
     }
 private:
     void calibrate() {

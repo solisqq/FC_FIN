@@ -13,11 +13,9 @@ private:
     Type maxVal, minVal;
     Type minMap, maxMap;
     Type rangeVal, rangeMap, offset=0;
-    bool negative = true;
 public:
-    Mapper(Type _maxVal, Type _minVal, Type _minMap, Type _maxMap, bool neg = true): maxVal(_maxVal), minVal(_minVal), minMap(_minMap), maxMap(_maxMap) {
+    Mapper(Type _maxVal, Type _minVal, Type _minMap, Type _maxMap): maxVal(_maxVal), minVal(_minVal), minMap(_minMap), maxMap(_maxMap) {
         rangeMap = _maxMap - _minMap;
-        negative = neg;
         calibrate();
     }
     virtual void update(Type newVal) {
@@ -33,14 +31,11 @@ public:
                 calibrate();
             }
         }
-        Filter<Type>::filtered = (((newVal-minVal)*rangeMap)/rangeVal);
-        if(negative) Filter<Type>::filtered -= offset; 
+        Filter<Type>::filtered = (((newVal-minVal)*rangeMap)/rangeVal)+minMap;
     }
 private:
     void calibrate() {
         rangeVal = maxVal-minVal;
-        if(minMap<0 && negative)
-            offset = (maxMap-minMap)/2.0;
     }
 };
 
