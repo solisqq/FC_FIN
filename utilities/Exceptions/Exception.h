@@ -1,7 +1,6 @@
 #pragma once
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
-//#define EXCEPTION_HOLD(x,explist) while(!x) {} Output::succExc(explist);
 #define EXCEPTION_HOLD(x,expc) while(!x) {} Output::succExc(expc);
 
 #include "../Output/Output.h"
