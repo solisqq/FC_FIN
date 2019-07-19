@@ -6,11 +6,11 @@ String Output::newLine = "\n";
 String Output::bracketEnd = ")";
 String Output::bracketBegin = "(";
 
-long Output::baudRate = 115200;
+long Output::baudRate = 230400;
 
 void Output::initialize() {
     Serial.begin(baudRate);
-    delay(10);    
+    WAIT_SHORT;  
 }
 void Output::print(AllowPrint &printable){
     Serial.print(printable.toString());

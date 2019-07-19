@@ -1,6 +1,6 @@
 #pragma once
-#ifndef LISTT_H
-#define LISTT_H
+#ifndef LISTTT_H
+#define LISTTT_H
 
 template<class Type>
 class List {

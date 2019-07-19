@@ -28,5 +28,19 @@ public:
         if(i<right)
             quickSort(tab,i,right);
     }
+    static float calcAvg(Type *tab, int count) {
+        Type val = 0;
+        for(int i=0; i<count; i++)
+            val+=tab[i];
+        
+        return val/count;
+    }
+    static double calcAvg(const List<Type> &_list) {
+        double val = 0;
+        for(typename List<Type>::Node *current = _list.front; current!=nullptr; current = current->next) 
+            val+=current->val;
+        
+        return val/_list.Count;
+    }
 };
 #endif

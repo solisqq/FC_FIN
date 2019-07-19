@@ -10,7 +10,7 @@ template <class Type>
 class FilterableValue: public AllowPrint {
 public:
 	Type value;
-	FilterableValue(){value=0;}
+	FilterableValue(){}
 	List<Filter<Type>*> filters;
 	void update(Type val) {
 		if(filters.Count==0) {
