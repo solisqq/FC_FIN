@@ -5,8 +5,11 @@ void mainLoop()
 {
     imu.update();
 
-    if(debugTimer.IsReady()) 
+    if(debugTimer.IsReady()) {
+        //Serial.println(imu.compStrX.value,4);
         debugger.Show();
+    }
+       
 
     if(rxTimer.IsReady())
         rx.update(); 

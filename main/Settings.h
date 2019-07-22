@@ -42,7 +42,16 @@ public:
     class IMU {
         public:
         static float gyroStr;
-        static float accelStr; 
+    };
+    class Engines {
+        public:
+        static int minimum;
+        static int start;
+        static int maximum;
+        static int fl;
+        static int fr;
+        static int br;
+        static int bl;
     };
 };
 
@@ -65,8 +74,15 @@ float Settings::PID::dt = 0.001;
 
 float Settings::Math::constPI = 3.14159265358979323846;
 
-float Settings::IMU::gyroStr = 0.996;
-float Settings::IMU::accelStr = 1.0 - Settings::IMU::gyroStr;
+float Settings::IMU::gyroStr = 0.995;
+
+int Settings::Engines::minimum = 1148;
+int Settings::Engines::maximum = 1832;
+int Settings::Engines::start = 1200;
+int Settings::Engines::fl = 27;
+int Settings::Engines::fr = 14;
+int Settings::Engines::bl = 26;
+int Settings::Engines::br = 25;
 
 
 #endif

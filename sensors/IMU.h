@@ -14,13 +14,15 @@
 #include "../infac/Pair.h"
 #include "../filters/Complementary.h"
 #include "Accel/Accel.h"
-#include "../filters/AbsoluteHighPass.h"
+#include "../filters/Mapper.h"
 
 class IMU : public DebugItem {
 private:
     SPIClass *MPUSPI;
     MPU9250 *mpu;
 public:
+	FilterableValue<float> compStrX;
+	FilterableValue<float> compStrY;
 	bool dataReady=false;
     Gyro gyro; 
 	Accel accel;
@@ -42,6 +44,10 @@ public:
 		eulers.z.update(0);
 		eulers.y.update(0);
 		eulers.x.update(0);
+		compStrX.addFilter(new Mapper<float>(16384, -16384, -0.065, 0.065));
+		compStrY.addFilter(new Mapper<float>(16384, -16384, -0.065, 0.065));
+		compStrX.addFilter(new SimpleIR<float>(0.85));
+		compStrY.addFilter(new SimpleIR<float>(0.85));
 		return true;
     }
 	void update() {
@@ -54,6 +60,8 @@ public:
 			Vector<int16_t> accelData;
 			mpu->readRawAccel(&accelData);
 			accel.update(accelData);
+			compStrX.update(gyro.values.x.value);
+			compStrY.update(gyro.values.y.value);
 			sensorFusion();
 		}
 	}
@@ -61,11 +69,18 @@ private:
 	void sensorFusion() {
 		Vector<float> gyroData = gyro.getDegPerSec();
 		Vector<float> accelData = accel.getEulers(eulers);
+		
+		float compStrX_converted = Settings::IMU::gyroStr+abs(compStrX.value);
+		float compStrY_converted = Settings::IMU::gyroStr+abs(compStrY.value);
+		
+		if(compStrX_converted>1.0) compStrX_converted = 1.0;
+		if(compStrY_converted>1.0) compStrY_converted = 1.0;
+
 		gyroData *= Settings::PID::dt;
 		gyroData.x += eulers.x.value;
 		gyroData.y += eulers.y.value;
-		eulers.x.value = (gyroData.x * Settings::IMU::gyroStr) + (accelData.x*Settings::IMU::accelStr);
-		eulers.y.value = (gyroData.y * Settings::IMU::gyroStr) + (accelData.y*Settings::IMU::accelStr);
+		eulers.x.value = (gyroData.x * compStrX_converted) + (accelData.x*(1.0-compStrX_converted));
+		eulers.y.value = (gyroData.y * compStrY_converted) + (accelData.y*(1.0-compStrY_converted));
 		eulers.z.value += gyroData.z;
 		dataReady = true;
 	}
