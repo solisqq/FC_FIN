@@ -73,6 +73,13 @@ public:
 	    this->z *= right;
 	    return *this;
 	}
+	Vector<Type>& operator/=(float right)
+	{
+	    this->x /= right;
+	    this->y /= right;
+	    this->z /= right;
+	    return *this;
+	}
 	Vector<Type>& operator*(const Vector<Type>& right)
 	{
 		Type toRet;

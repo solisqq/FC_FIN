@@ -12,8 +12,11 @@ void mainLoop()
         rx.update(); 
 
     if(Serial.available()) {
-        if(Serial.read()=='a') {
-            cmd.doActionOnCMD("accel");
+        char c = Serial.read();
+        if(c=='\n'){
+            cmd.doActionOnCMD(command);
+            command="";
         }
+        else command+=c;
     }
 }

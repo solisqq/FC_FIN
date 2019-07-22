@@ -1,6 +1,8 @@
 #pragma once
 #include "globalObjects.h"
 
+String command;
+
 void initialize(){
 	Output::initialize();
 	Output::info("Welcome to HawkFC! Have fun flight!");
@@ -21,7 +23,7 @@ void initialize(){
 		Output::throwExc(rxFail);
 		EXCEPTION_HOLD(rx.isActive(),rxFail);
 	}
-	cmd.setDebugOnCMD(debugger, rx, "receiver");
+	cmd.setDebugOnCMD(debugger, rx, "rx");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, imu.accel, "accel");
 	cmd.setDebugOnCMD(debugger, imu, "imu");

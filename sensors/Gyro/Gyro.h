@@ -10,10 +10,14 @@ public:
     Gyro() {}
     virtual String getClassName(){return "Gyro";}
     virtual String getDebugMsg(bool raw=false) {return Sensor3D::toString();}
-    /*Point3D<float> convertToDegPerSec(double timeInSec) {
-        Point3D<float> converted;
-        converted.x.update((values.x.value/Settings::gyroSensitivity)/timeInSec);
-    }*/
+    Vector<float> getDegPerSec() {
+        Vector<float> converted;
+        converted.x = static_cast<Average<int16_t>*>(values.x.filters.back->val)->getAvg();
+        converted.y = static_cast<Average<int16_t>*>(values.y.filters.back->val)->getAvg();
+        converted.z = static_cast<Average<int16_t>*>(values.z.filters.back->val)->getAvg();
+        converted /= Settings::Gyro::sensitivity;
+        return converted;
+    }
     void setAvgFilter(int count) {
         Sensor3D::values.x.addFilter(new Average<int16_t>(count));
         Sensor3D::values.y.addFilter(new Average<int16_t>(count));

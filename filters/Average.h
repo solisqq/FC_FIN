@@ -26,7 +26,9 @@ public:
         values.pushBack(newVal);
     }
     Type getAvg() {
-        return Algorithms<Type>::calcAvg(values);
+        if(values.Count==count) 
+            Filter<Type>::filtered = Algorithms<Type>::calcAvg(values);
+        return Filter<Type>::filtered;
     }
 };
 
