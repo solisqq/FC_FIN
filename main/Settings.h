@@ -12,6 +12,7 @@ public:
         static int calibThreshold;
         static float cutOff;
         static float sensitivity;
+        static double dt;
     };
     class Accel
     {
@@ -33,6 +34,12 @@ public:
     public:
         static int freq;
         static float dt;
+        class RollPitch {
+        public:
+            static float P;
+            static float I;
+            static float D;
+        };
     };
     class Math
     {
@@ -57,10 +64,10 @@ public:
 
 float Settings::Gyro::cutOff = 70.0;
 int Settings::Gyro::freq = 8000;
-int Settings::Gyro::calibThreshold = 50;
-float Settings::Gyro::sensitivity = 125.0;
+int Settings::Gyro::calibThreshold = 100;
+float Settings::Gyro::sensitivity = 120.0;
 
-float Settings::Accel::cutOff = 8.0;
+float Settings::Accel::cutOff = 4.0;
 int Settings::Accel::freq = 1000;
 float Settings::Accel::range = 4.0;
 int16_t Settings::Accel::oneGAsInt = 8192;
@@ -72,9 +79,13 @@ bool Settings::RX::stopOnFail = false;
 int Settings::PID::freq = 1000;
 float Settings::PID::dt = 0.001;
 
+float Settings::PID::RollPitch::P = 4.0;
+float Settings::PID::RollPitch::I = 0.2;
+float Settings::PID::RollPitch::D = 1.5;
+
 float Settings::Math::constPI = 3.14159265358979323846;
 
-float Settings::IMU::gyroStr = 0.995;
+float Settings::IMU::gyroStr = 0.9996;
 
 int Settings::Engines::minimum = 1148;
 int Settings::Engines::maximum = 1832;

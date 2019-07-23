@@ -19,13 +19,19 @@ public:
         engines[1] = &frontRight;
         engines[2] = &backLeft;
         engines[3] = &backRight;
-
-        frontLeft.Init(Settings::Engines::fl);
-        frontLeft.Init(Settings::Engines::fr);
-        frontLeft.Init(Settings::Engines::bl);
-        frontLeft.Init(Settings::Engines::br);
     }
-    ~Steering();
+    void init() {
+        frontLeft.Init(Settings::Engines::fl);
+        frontRight.Init(Settings::Engines::fr);
+        backLeft.Init(Settings::Engines::bl);
+        backRight.Init(Settings::Engines::br);
+
+        delay(200);
+    }
+    void setThrottle(int throttleVal) {
+        for(int i=0; i<4; i++) 
+            engines[i]->SetSpeed(throttleVal);
+    }
 };
 
 #endif

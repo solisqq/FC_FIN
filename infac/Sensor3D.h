@@ -7,6 +7,7 @@
 #include "../filters/ButterworthLP.h"
 #include "AllowPrint.h"
 #include "DebugItem.h"
+#include "../sensors/MPU9250.h"
 
 class Sensor3D : public AllowPrint
 {
@@ -29,7 +30,7 @@ public:
     {
         values.x.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
         values.y.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
-        values.x.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
+        values.z.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
     }
     bool update(int16_t x, int16_t y, int16_t z) { values.updateAll(x, y, z); }
     bool update(Vector<int16_t> vect) { values.updateAll(vect.x, vect.y, vect.z); }
@@ -41,6 +42,7 @@ public:
                values.y.toString() + ", " +
                values.z.toString() + ")";
     }
+    virtual void updateByMPU(MPU9250 *mpu)=0;
 };
 
 #endif

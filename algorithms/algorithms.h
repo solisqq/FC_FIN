@@ -3,6 +3,8 @@
 #define ALGORITHMS_H
 #define ABSOLUTE_DIFFERENCE(A,B) ((A-B)<0 ? (-(A-B)): (A-B))
 #include "../structures/List.h"
+#include "../math/Point3D/Point3D.h"
+#include "../math/Point3D/Vector.h"
 
 template <class Type>
 class Algorithms {

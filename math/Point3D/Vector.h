@@ -3,113 +3,136 @@
 
 #include <String.h>
 #define RAD_MULTI 0.01745329251
-#define FOR_ALL_VECTORS for(int i=0;i<3;i++)
+#define FOR_ALL_VECTORS for (int i = 0; i < 3; i++)
 
-template <class Type> 
+template <class Type>
 class Vector : public AllowPrint
 {
 public:
-   	Type x,y,z;
-   	Vector(){x=0;y=0;z=0;}
-   	Vector(Type val){x=val;y=val;z=val;}
-   	Vector(bool nulify){}
-   	Vector(Type x, Type y, Type z): x(x), y(y), z(z){}
-   	Vector<Type> InvertXY() {
-   		Vector<Type> inverted(this->y*(-1),this->x*(-1),this->z);
-   		return inverted;
-   	}
-   	Vector<Type> toRadians() {return (*this)*RAD_MULTI;}
-   	virtual String toString() {
-		   return "Vector("+
-		   (String)x+Output::coma+
-		   (String)y+Output::coma+
-		   (String)z+Output::bracketEnd;
-	}
-   	Type& operator[] (int i) {
-        if(i<1) return this->x;
-        if(i>1) return this->z;
-        return this->y;
-    }
-    Vector<Type>& operator=(const Vector<Type>& right)
+	Type x, y, z;
+	Vector()
 	{
-	    this->x = right.x;
-	    this->y = right.y;
-	    this->z = right.z;
-	    return *this;
+		x = 0;
+		y = 0;
+		z = 0;
 	}
-    Vector<Type>& operator+=(const Vector<Type>& right)
+	Vector(Type val)
 	{
-	    this->x += right.x;
-	    this->y += right.y;
-	    this->z += right.z;
-	    return *this;
+		x = val;
+		y = val;
+		z = val;
 	}
-	Vector<Type>& operator/=(const Vector<Type>& right)
+	Vector(bool nulify) {}
+	Vector(Type x, Type y, Type z) : x(x), y(y), z(z) {}
+	Vector<Type> InvertXY()
 	{
-	    this->x /= right.x;
-	    this->y /= right.y;
-	    this->z /= right.z;
-	    return *this;
+		Vector<Type> inverted(this->y * (-1), this->x * (-1), this->z);
+		return inverted;
 	}
-	Vector<Type>& operator/(const Vector<Type>& right)
+	Vector<Type> toRadians() { return (*this) * RAD_MULTI; }
+	virtual String toString()
 	{
-		Type toRet;
-	    toRet.x = this->x/right.x;
-	    toRet.y = this->y/right.y;
-	    toRet.z = this->z/right.z;
-	    return toRet;
+		return "Vector(" +
+			   (String)x + Output::coma +
+			   (String)y + Output::coma +
+			   (String)z + Output::bracketEnd;
 	}
-	Vector<Type>& operator*=(const Vector<Type>& right)
+	Type &operator[](int i)
 	{
-	    this->x *= right.x;
-	    this->y *= right.y;
-	    this->z *= right.z;
-	    return *this;
+		if (i < 1)
+			return this->x;
+		if (i > 1)
+			return this->z;
+		return this->y;
 	}
-	Vector<Type>& operator*=(double right)
+	Vector<Type> operator=(const Vector<Type> &right)
 	{
-	    this->x *= right;
-	    this->y *= right;
-	    this->z *= right;
-	    return *this;
+		this->x = right.x;
+		this->y = right.y;
+		this->z = right.z;
+		return *this;
 	}
-	Vector<Type>& operator/=(float right)
+	Vector<Type> operator=(Type right)
 	{
-	    this->x /= right;
-	    this->y /= right;
-	    this->z /= right;
-	    return *this;
+		this->x = right;
+		this->y = right;
+		this->z = right;
+		return *this;
 	}
-	Vector<Type>& operator*(const Vector<Type>& right)
+	Vector<Type> operator+=(const Vector<Type> &right)
 	{
-		Type toRet;
-	    toRet.x = this->x*right.x;
-	    toRet.y = this->y*right.y;
-	    toRet.z = this->z*right.z;
-	    return toRet;
+		this->x += right.x;
+		this->y += right.y;
+		this->z += right.z;
+		return *this;
 	}
-	Vector<Type>& operator-=(const Vector<Type>& right)
+	Vector<Type> operator/=(const Vector<Type> &right)
 	{
-	    this->x -= right.x;
-	    this->y -= right.y;
-	    this->z += right.z;
-	    return -this;
+		this->x /= right.x;
+		this->y /= right.y;
+		this->z /= right.z;
+		return *this;
 	}
-	Vector<Type>& operator+(const Vector<Type>& right)
+	Vector<Type> operator*=(const Vector<Type> &right)
 	{
-		Type toRet;
-	    toRet.x = this->x + right.x;
-	    toRet.y = this->y + right.y;
-	    toRet.z = this->z + right.z;
-	    return toRet;
+		this->x *= right.x;
+		this->y *= right.y;
+		this->z *= right.z;
+		return *this;
 	}
-	Vector<Type>& operator-(const Vector<Type>& right)
+	Vector<Type> operator*=(double right)
 	{
-		Type toRet;
-	    toRet.x = this->x - right.x;
-	    toRet.y = this->y - right.y;
-	    toRet.z = this->z - right.z;
-	    return toRet;
+		this->x *= right;
+		this->y *= right;
+		this->z *= right;
+		return *this;
+	}
+	Vector<Type> operator/=(float right)
+	{
+		this->x /= right;
+		this->y /= right;
+		this->z /= right;
+		return *this;
+	}
+	
+	Vector<Type> operator-=(const Vector<Type> &right)
+	{
+		this->x -= right.x;
+		this->y -= right.y;
+		this->z += right.z;
+		return -this;
+	}
+	Vector<Type> operator/(const Vector<Type> &right)
+	{
+		return Vector<Type>(this->x / right.x, this->y / right.y, this->z / right.z);
+	}
+	Vector<Type> operator/(const Type right)
+	{
+		return Vector<Type>(this->x / right, this->y / right, this->z / right);
+	}
+	Vector<Type> operator*(const Vector<Type> &right)
+	{
+		return Vector<Type>(this->x * right.x, this->y * right.y, this->z * right.z);
+	}
+	Vector<Type> operator*(const Type right)
+	{
+		return Vector<Type>(this->x * right, this->y * right, this->z * right);
+	}
+	Vector<Type> operator+(const Vector<Type> &right)
+	{
+		return Vector<Type>(this->x + right.x, this->y + right.y, this->z + right.z);
+	}
+	Vector<Type> operator-(const Vector<Type> &right)
+	{
+		return Vector<Type>(this->x - right.x, this->y - right.y, this->z - right.z);
+	}
+	Vector<float> toFloat()
+	{
+		Vector<float> toRet;
+		toRet.x = static_cast<float>(this->x);
+		toRet.y = static_cast<float>(this->y);
+		toRet.z = static_cast<float>(this->z);
+		return toRet;
 	}
 };
 

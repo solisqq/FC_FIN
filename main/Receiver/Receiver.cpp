@@ -78,3 +78,8 @@ String Receiver::toString()
 
     return msg;
 }
+Point3D<float> Receiver::getPoint3D() {
+    Point3D<float> toRet;
+    toRet.updateAll(Roll.get(), Pitch.get(), Yaw.get());
+    return toRet;
+}

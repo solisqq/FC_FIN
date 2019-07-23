@@ -25,6 +25,7 @@ public:
     virtual String getClassName();
     virtual String getDebugMsg(bool raw=false);
     virtual String toString();
+    Point3D<float> getPoint3D();
     bool isActive();
 private:
     bool isRadioOn();

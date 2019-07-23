@@ -3,7 +3,7 @@
 #define ACCEL_H
 
 #include "../../infac/Sensor3D.h"
-
+#include "../MPU9250.h"
 
 class Accel : public Sensor3D, public DebugItem {
 public:
@@ -20,6 +20,11 @@ public:
 		if(currAccel.y!=currAccel.y) currAccel.y = backup.y.value;
 		return currAccel;
     }
+	virtual void updateByMPU(MPU9250 *mpu) {
+		Vector<int16_t> accelData;
+		mpu->readRawAccel(&accelData);
+		Sensor3D::update(accelData);
+	}
 };
 
 #endif

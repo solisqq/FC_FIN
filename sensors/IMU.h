@@ -41,27 +41,29 @@ public:
 		gyro.setLowPassFilter(Settings::Gyro::cutOff);
 		gyro.setAvgFilter(Settings::Gyro::freq/Settings::PID::freq);
 		accel.setLowPassFilter(Settings::Accel::cutOff);
-		eulers.z.update(0);
-		eulers.y.update(0);
-		eulers.x.update(0);
-		compStrX.addFilter(new Mapper<float>(16384, -16384, -0.065, 0.065));
-		compStrY.addFilter(new Mapper<float>(16384, -16384, -0.065, 0.065));
+		compStrX.addFilter(new Mapper<float>(16384, -16384, -0.025, 0.025));
+		compStrY.addFilter(new Mapper<float>(16384, -16384, -0.025, 0.025));
 		compStrX.addFilter(new SimpleIR<float>(0.85));
 		compStrY.addFilter(new SimpleIR<float>(0.85));
+
+		for(int i=0; i<Settings::Accel::freq; i++) {
+			while(!accel.dataReady()){}
+			accel.updateByMPU(mpu);
+		}
+	
+		Vector<float> accelData = accel.getEulers(eulers);
+		eulers.z.value = 0;
+		eulers.y.value = accelData.y;
+		eulers.x.value = accelData.x;
+
 		return true;
     }
 	void update() {
-		if(gyro.dataReady()) {
-			Vector<int16_t> gyroData;
-			mpu->readRawGyro(&gyroData);
-			gyro.update(gyroData);
-		}
+		if(gyro.dataReady()) 
+			gyro.updateByMPU(mpu);
+
 		if(accel.dataReady()) {
-			Vector<int16_t> accelData;
-			mpu->readRawAccel(&accelData);
-			accel.update(accelData);
-			compStrX.update(gyro.values.x.value);
-			compStrY.update(gyro.values.y.value);
+			accel.updateByMPU(mpu);
 			sensorFusion();
 		}
 	}
@@ -69,6 +71,9 @@ private:
 	void sensorFusion() {
 		Vector<float> gyroData = gyro.getDegPerSec();
 		Vector<float> accelData = accel.getEulers(eulers);
+
+		compStrX.update(gyro.values.x.value);
+		compStrY.update(gyro.values.y.value);
 		
 		float compStrX_converted = Settings::IMU::gyroStr+abs(compStrX.value);
 		float compStrY_converted = Settings::IMU::gyroStr+abs(compStrY.value);

@@ -27,5 +27,8 @@ void initialize(){
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, imu.accel, "accel");
 	cmd.setDebugOnCMD(debugger, imu, "imu");
+	cmd.setDebugOnCMD(debugger, pid, "pid");
+
+	copter.init();
 }
 

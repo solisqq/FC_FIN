@@ -23,6 +23,11 @@ public:
         Sensor3D::values.y.addFilter(new Average<int16_t>(count));
         Sensor3D::values.z.addFilter(new Average<int16_t>(count));
     }
+    virtual void updateByMPU(MPU9250 *mpu) {
+		Vector<int16_t> gyroData;
+		mpu->readRawGyro(&gyroData);
+		Sensor3D::update(gyroData);
+	}
 };
 
 #endif
