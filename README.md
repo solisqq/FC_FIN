@@ -15,3 +15,6 @@
 - MPU9250/MPU6050 (GY-91/GY-521)
 - PWM/OneShot125 ESCs
 - CPPM-type RX modules (like FrSky D4R-II) 
+
+
+![](https://raw.githubusercontent.com/solisqq/FC_FIN/master/img/drone.jpg)
