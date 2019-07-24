@@ -17,4 +17,4 @@
 - CPPM-type RX modules (like FrSky D4R-II) 
 
 
-![](https://raw.githubusercontent.com/solisqq/FC_FIN/master/img/drone.jpg)
+![](https://raw.githubusercontent.com/solisqq/FC_FIN/master/img/drone.jpg=300x200)
