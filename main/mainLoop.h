@@ -4,28 +4,35 @@
 void mainLoop()
 {
     imu.update();
-    
-    //if(rx.Switch[1].get()>0) {
-        if(imu.dataReady==true) {
-            copter.setThrottle(rx.Throttle.get());
-            pid.run(imu.eulers, rx.getPoint3D());
-            imu.dataReady=false;
+
+    if (rx.Switch[1].get() > 0)
+    {
+        if (imu.dataReady == true)
+        {
+            copter.setState(Steering::State::Flying);
+            imu.dataReady = false;
         }
-    //}
-    
-    if(debugTimer.IsReady()) 
+    }
+    else{
+        copter.setState(Steering::State::Idle);
+        copter.stop();
+    }
+
+    if (debugTimer.IsReady())
         debugger.Show();
 
+    if (rxTimer.IsReady())
+        rx.update();
 
-    if(rxTimer.IsReady())
-        rx.update(); 
-
-    if(Serial.available()) {
+    if (Serial.available())
+    {
         char c = Serial.read();
-        if(c=='\n'){
+        if (c == '\n')
+        {
             cmd.doActionOnCMD(command);
-            command="";
+            command = "";
         }
-        else command+=c;
+        else
+            command += c;
     }
 }

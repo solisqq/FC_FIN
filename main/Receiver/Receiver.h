@@ -12,6 +12,7 @@
 #include "../../filters/Mapper.h"
 #include "../../filters/ExpHighPass.h"
 #include "../../filters/Exponential.h"
+#include "../../filters/YawFilter.h"
 #include "Axis.h"
 #include "PPMHandler.h"
 
@@ -20,11 +21,13 @@ public:
     Axis **Channels;
     Axis Throttle,Roll,Pitch,Yaw;
     Axis Switch[4];
+    float staticYaw=0.0;
     void initialize(int RTX_PIN, int medianStr, float irStr);
     void update();
     virtual String getClassName();
     virtual String getDebugMsg(bool raw=false);
     virtual String toString();
+    float getForPid(float value);
     Point3D<float> getPoint3D();
     bool isActive();
 private:

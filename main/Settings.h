@@ -28,6 +28,8 @@ public:
     {
     public:
         static bool stopOnFail;
+        static float threshold;
+        static float yawDivider;
     };
     class PID
     {
@@ -75,12 +77,14 @@ int16_t Settings::Accel::xOffset = 0;
 int16_t Settings::Accel::yOffset = 0;
 
 bool Settings::RX::stopOnFail = false;
+float Settings::RX::threshold = 0.4;
+float Settings::RX::yawDivider = 4;
 
 int Settings::PID::freq = 1000;
 float Settings::PID::dt = 0.001;
 
 float Settings::PID::RollPitch::P = 4.0;
-float Settings::PID::RollPitch::I = 0.2;
+float Settings::PID::RollPitch::I = 3.0;
 float Settings::PID::RollPitch::D = 1.5;
 
 float Settings::Math::constPI = 3.14159265358979323846;

@@ -16,4 +16,13 @@ public:
     }
 };
 
+class DebugClear : public Action {
+    Debug &debug;
+public:
+    DebugClear(Debug& _debugger): debug(_debugger){}
+    virtual void execute(int *params) {
+        debug.items.clear();
+    }
+};
+
 #endif

@@ -2,8 +2,8 @@
 int channelPinAvailable = 2;
 
 #include "Settings.h"
-
-class Engine {
+#include "../infac/AllowPrint.h"
+class Engine : public AllowPrint {
 public:
 	int pinID, speed=Settings::Engines::minimum;
 	int myChannel;
@@ -19,11 +19,19 @@ public:
 		SetSpeed(Settings::Engines::minimum);
 	}
 	void SetSpeed(int newSpeed) {
-		if(newSpeed<Settings::Engines::minimum || newSpeed>Settings::Engines::maximum) return;
-		speed=newSpeed;
+		if(newSpeed<Settings::Engines::minimum) 
+			speed = Settings::Engines::minimum;
+		else if(newSpeed>Settings::Engines::maximum)
+			speed = Settings::Engines::maximum;
+		else
+			speed=newSpeed;
+			
 		ledcWrite(myChannel,speed);
 	}
 	void Stop() {
 		SetSpeed(Settings::Engines::minimum);
+	}
+	virtual String toString() {
+		return static_cast<String>(speed);
 	}
 };

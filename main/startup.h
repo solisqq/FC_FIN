@@ -23,12 +23,17 @@ void initialize(){
 		Output::throwExc(rxFail);
 		EXCEPTION_HOLD(rx.isActive(),rxFail);
 	}
+	cmd.setDebugClearOnCMD(debugger,"clear");
 	cmd.setDebugOnCMD(debugger, rx, "rx");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, imu.accel, "accel");
 	cmd.setDebugOnCMD(debugger, imu, "imu");
 	cmd.setDebugOnCMD(debugger, pid, "pid");
+	cmd.setDebugOnCMD(debugger, pid.proportional, "pid p");
+	cmd.setDebugOnCMD(debugger, pid.integral, "pid i");
+	cmd.setDebugOnCMD(debugger, pid.derivative, "pid d");
+	cmd.setDebugOnCMD(debugger, copter, "engines");
 
-	copter.init();
+	copter.init(&imu, &rx, &pid);
 }
 

@@ -85,7 +85,17 @@ public:
         }
         return false;
     }
-    
+    void clear() {
+        Node* current = front;
+        while(current->next!=nullptr) {
+            Node *backup = current->next;
+            delete current;
+            current = backup;
+        }
+        delete current;
+        Count = 0;
+        front = back = nullptr;
+    }
     Node* top() { return front;}
     Node* last() { return back;}
     void Union(List<Type> list) {
