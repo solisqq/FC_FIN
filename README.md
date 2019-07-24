@@ -14,4 +14,4 @@
 - ESP32 Sparkfun Thing
 - MPU9250/MPU6050 (GY-91/GY-521)
 - PWM/OneShot125 ESCs
-- CPPM-type RX module (like FrSky D4R-II) 
+- CPPM-type RX modules (like FrSky D4R-II) 
