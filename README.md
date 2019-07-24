@@ -16,8 +16,9 @@
 - PWM/OneShot125 ESCs
 - CPPM-type RX modules (like FrSky D4R-II) 
 
-### How to
-##### 1. Filtering/Signal processing:
+
+## How to
+#### 1. Filtering/Signal processing:
 If you want to process value which is being continuously updated you have to initialize it as template FilterableValue:
 
 `FilterableValue<float> gyroscope;`
@@ -37,7 +38,7 @@ gyroscope.addFilter(new SimpleIR<float>(filter_dump_strength));
 ```
 this example will run Butterworth low pass filter on new value and pass processed value to SimpleIR filter so it can processed it further. 
 
-##### 2. Add debug command
+#### 2. Add debug command
 Keeping eye on data processing is very important. Debug system allows you to observe values of almost any utility and sensor. 
 
 If you want to show your object data in debug system it need to inherit from DebugInfo interface.  DebugInfo interface has one virtual method which returns a String. This string is going to be showed when object will be debugged. 
