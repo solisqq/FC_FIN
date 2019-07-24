@@ -31,7 +31,9 @@
 			"xutility": "cpp",
 			"string": "cpp",
 			"xlocale": "cpp",
-			"xhash": "cpp"
+			"xhash": "cpp",
+			"functional": "cpp",
+			"system_error": "cpp"
 		}
 	}
 }
