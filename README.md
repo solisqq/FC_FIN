@@ -19,7 +19,7 @@
 
 ## How to
 #### 1. Filtering/Signal processing:
-If you want to process value which is being continuously updated you have to initialize it as template FilterableValue:
+If you want to process data which is being continuously updated you have to initialize it as template FilterableValue:
 
 `FilterableValue<float> gyroscope;`
 
