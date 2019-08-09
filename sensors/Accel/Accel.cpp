@@ -2,7 +2,7 @@
 Accel::Accel() {}
 String Accel::getClassName() { return "Accel"; }
 String Accel::getDebugMsg(bool raw) { return Sensor3D::toString(); }
-
+//jakas zmiana
 Vector<float> Accel::getEulers(Point3D<float> backup)
 {
 	Vector<float> currAccel;
