@@ -24,8 +24,9 @@ void initialize(){
 		EXCEPTION_HOLD(rx.isActive(),rxFail);
 	}
 	cmd.setDebugClearOnCMD(debugger,"clear");
-	cmd.setDebugOnCMD(debugger, rx, "rx");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
+	cmd.setDebugOnCMD(debugger, rx, "rx");
+	//cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, imu.accel, "accel");
 	cmd.setDebugOnCMD(debugger, imu, "imu");
 	cmd.setDebugOnCMD(debugger, pid, "pid");
@@ -34,6 +35,6 @@ void initialize(){
 	cmd.setDebugOnCMD(debugger, pid.derivative, "pid d");
 	cmd.setDebugOnCMD(debugger, copter, "engines");
 
-	copter.init(&imu, &rx, &pid);
+	copter.init(&imu, &rx, &pid, &debugger);
 }
 

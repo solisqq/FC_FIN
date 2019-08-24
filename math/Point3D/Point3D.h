@@ -15,7 +15,7 @@ class Point3D : public AllowPrint, public DebugItem {
 public:
 	enum Var {X=0,Y=1,Z=2};
 	FilterableValue<Type> x,y,z;
-	Point3D() {}
+	Point3D() {x.value=0; y.value=0; z.value=0;}
 	Point3D(Type X, Type Y, Type Z):x(X),y(Y),z(Z) {}
 	void update(Var var, Type val) {
 		if(var==Var::X) x.update(val);
@@ -31,6 +31,13 @@ public:
 		x.update(vect.x);
 		y.update(vect.y);
 		z.update(vect.z);
+	}
+	static Point3D<Type> toPoint3D(Vector<Type> vect) {
+		Point3D<Type> toRet;
+		toRet.x.value = vect.x;
+		toRet.y.value = vect.y;
+		toRet.z.value = vect.z;
+		return toRet;
 	}
 	Vector<Type> getVector() {
 		Vector<Type> toRet;

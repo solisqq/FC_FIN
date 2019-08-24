@@ -33,7 +33,12 @@
 			"xlocale": "cpp",
 			"xhash": "cpp",
 			"functional": "cpp",
-			"system_error": "cpp"
+			"system_error": "cpp",
+			"array": "cpp",
+			"istream": "cpp",
+			"memory": "cpp",
+			"xlocnum": "cpp",
+			"*.tcc": "cpp"
 		}
 	}
 }

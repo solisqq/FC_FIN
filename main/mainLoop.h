@@ -5,7 +5,12 @@ void mainLoop()
 {
     imu.update();
 
-    if (rx.Switch[1].get() > 0)
+    if (rxTimer.IsReady())
+            rx.update();
+    if (debugTimer.IsReady())
+            debugger.Show();
+            
+    if (rx.Switch[1].get() > 0.8)
     {
         if (imu.dataReady == true)
         {
@@ -13,26 +18,18 @@ void mainLoop()
             imu.dataReady = false;
         }
     }
-    else{
+    else {
         copter.setState(Steering::State::Idle);
         copter.stop();
-    }
-
-    if (debugTimer.IsReady())
-        debugger.Show();
-
-    if (rxTimer.IsReady())
-        rx.update();
-
-    if (Serial.available())
-    {
-        char c = Serial.read();
-        if (c == '\n')
+        
+        if (Serial.available())
         {
-            cmd.doActionOnCMD(command);
-            command = "";
+            char c = Serial.read();
+            if (c == '\n')
+            {
+                cmd.doActionOnCMD(command);
+                command = "";
+            } else command += c;
         }
-        else
-            command += c;
     }
 }

@@ -5,7 +5,8 @@
 #include "Engine.h"
 #include "../infac/DebugItem.h"
 #include "PID.h"
-
+#include "../utilities/Debug/Debug.h"
+#include "../math/Point3D/Vector.h"
 class Steering : public DebugItem
 {
 public:
@@ -22,11 +23,16 @@ private:
     Engine backLeft;
     Engine backRight;
     Engine **engines;
-
+    
     State currentState = State::Idle;
     Receiver *_rx;
     IMU *_imu;
     PID *_pid;
+    Debug *_debug;
+
+    Vector<float> accumulatedEulers;
+    int accumulationCounter=0;
+    
 public:
     Steering() {
         engines = new Engine*[4];
@@ -35,16 +41,19 @@ public:
         engines[2] = &backLeft;
         engines[3] = &backRight;
     }
-    void init(IMU *_imu1, Receiver *_rx1, PID *_pid1) {
+    void init(IMU *_imu1, Receiver *_rx1, PID *_pid1, Debug *_debug1) {
         _imu = _imu1;
         _rx = _rx1;
         _pid = _pid1;
+        _debug = _debug1;
         frontLeft.Init(Settings::Engines::fl);
         frontRight.Init(Settings::Engines::fr);
         backLeft.Init(Settings::Engines::bl);
         backRight.Init(Settings::Engines::br);
 
         delay(200);
+        //calibrate();
+        //test();
     }
     void setState(State state) {
         currentState = state;
@@ -56,24 +65,48 @@ public:
     }
     void setThrottle() {
         if(currentState==State::Flying) {
-            Point3D<float> pidV = _pid->run(_imu->eulers, _rx->getPoint3D());
-            frontLeft.SetSpeed(max(_rx->Throttle.get() - pidV.y.value + pidV.x.value + pidV.z.value, Settings::Engines::start));
-            frontRight.SetSpeed(max(_rx->Throttle.get() - pidV.y.value - pidV.x.value - pidV.z.value, Settings::Engines::start));
-            backLeft.SetSpeed(max(_rx->Throttle.get() + pidV.y.value + pidV.x.value - pidV.z.value, Settings::Engines::start));
-            backRight.SetSpeed(max(_rx->Throttle.get() + pidV.y.value - pidV.x.value + pidV.z.value, Settings::Engines::start));
+            accumulatedEulers = accumulatedEulers + _imu->eulers.getVector();
+            accumulationCounter++;
+            if(_pid->timer.IsReady()) {
+                accumulatedEulers = accumulatedEulers/accumulationCounter;
+                Vector<float> pidV = _pid->run(Point3D<float>::toPoint3D(accumulatedEulers), _rx->getPoint3D()).getVector();
+                frontLeft.SetSpeed(max(_rx->Throttle.get() - pidV.y + pidV.x + pidV.z, Settings::Engines::start));
+                frontRight.SetSpeed(max(_rx->Throttle.get() - pidV.y - pidV.x - pidV.z, Settings::Engines::start));
+                backLeft.SetSpeed(max(_rx->Throttle.get() + pidV.y + pidV.x - pidV.z, Settings::Engines::start));
+                backRight.SetSpeed(max(_rx->Throttle.get() + pidV.y - pidV.x + pidV.z, Settings::Engines::start));
+                accumulationCounter=1;
+            }
+            
         } else stop();
     }
     void calibrate() {
+        Output::printLine("Calibrating ESCs...");
+        delay(2000);
         for(int i=0; i<4; i++)
             engines[i]->SetSpeed(Settings::Engines::maximum);
         delay(6000);
         for(int i=0; i<4; i++)
-            engines[i]->SetSpeed(Settings::Engines::maximum);
+            engines[i]->SetSpeed(Settings::Engines::minimum);
         delay(4000);
     }
     void stop() {
         for(int i=0; i<4; i++)
             engines[i]->SetSpeed(Settings::Engines::minimum);
+    }
+    void test() {
+        delay(3000);
+        frontLeft.SetSpeed(1400);
+        delay(3000);
+        frontLeft.SetSpeed(1148);
+        frontRight.SetSpeed(1400);
+        delay(3000);
+        frontRight.SetSpeed(1148);
+        backLeft.SetSpeed(1400);
+        delay(3000);
+        backLeft.SetSpeed(1148);
+        backRight.SetSpeed(1400);
+        delay(3000);
+        backRight.SetSpeed(1400);
     }
     virtual String getClassName() {
         return "Engines";

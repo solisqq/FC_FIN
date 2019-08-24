@@ -46,6 +46,9 @@ public:
 		compStrX.addFilter(new SimpleIR<float>(0.85));
 		compStrY.addFilter(new SimpleIR<float>(0.85));
 
+		FilterableValue<float> gyroscopex;
+		
+
 		for(int i=0; i<Settings::Accel::freq; i++) {
 			while(!accel.dataReady()){}
 			accel.updateByMPU(mpu);

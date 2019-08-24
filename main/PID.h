@@ -7,6 +7,8 @@
 #include "Settings.h"
 #include "../infac/DebugItem.h"
 #include "../utilities/Output/Output.h"
+#include "../utilities/Timer/Timer.h"
+#include "../filters/SimpleIR.h"
 
 class PID : public DebugItem
 {
@@ -17,15 +19,21 @@ public:
     Point3D<float> proportional;
     Point3D<float> integral;
     Point3D<float> derivative;
+    Timer timer;
 
-    PID(/* args */) {}
-    Point3D<float> run(Point3D<float> current, Point3D<float> desired) {
+    PID(/* args */) {
+        timer.Init(1000000/Settings::PID::freq,true);
+        derivative.x.addFilter(new SimpleIR<float>(0.8));
+        derivative.y.addFilter(new SimpleIR<float>(0.8));
+        derivative.z.addFilter(new SimpleIR<float>(0.8));
+    }
+    Point3D<float> run(Vector<float> current, Point3D<float> desired) {
         Vector<float> error;
-        error = desired.getVector() - current.getVector();
+        error = desired.getVector() - current;
         
-        proportional.updateAll(error*Settings::PID::RollPitch::P);
-        integral.updateAll((error*Settings::PID::dt)*Settings::PID::RollPitch::I);
-        derivative.updateAll((error-preError)/Settings::PID::dt);
+        proportional.updateAll(error*Settings::PID::P);
+        integral.updateAll((error*Settings::PID::dt)*Settings::PID::I);
+        derivative.updateAll(((error-preError)/Settings::PID::dt)*Settings::PID::D);
         
         preError = error;
 
@@ -34,6 +42,7 @@ public:
         values.z.update(proportional.z.value + integral.z.value + derivative.z.value);
         return values;
     }
+    Point3D<float> run(Point3D<float> current, Point3D<float> desired) {return run(current.getVector(), desired);}
     virtual String getClassName() {return "PID";}
     virtual String getDebugMsg(bool raw=false) {
         String msg = getClassName()+": " + values.toString();
