@@ -57,8 +57,10 @@ public:
     }
     void setState(State state) {
         currentState = state;
-        if(currentState==State::Idle) 
+        if(currentState==State::Idle) {
             stop();
+            _pid->reset();
+        }
         else if(currentState==State::Flying) {
             setThrottle();
         }

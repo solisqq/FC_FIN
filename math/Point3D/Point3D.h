@@ -32,6 +32,11 @@ public:
 		y.update(vect.y);
 		z.update(vect.z);
 	}
+	void resetVals() {
+		x.value = 0;
+		y.value = 0;
+		z.value = 0;
+	} 
 	static Point3D<Type> toPoint3D(Vector<Type> vect) {
 		Point3D<Type> toRet;
 		toRet.x.value = vect.x;

@@ -23,9 +23,9 @@ public:
 
     PID(/* args */) {
         timer.Init(1000000/Settings::PID::freq,true);
-        derivative.x.addFilter(new SimpleIR<float>(0.8));
-        derivative.y.addFilter(new SimpleIR<float>(0.8));
-        derivative.z.addFilter(new SimpleIR<float>(0.8));
+        derivative.x.addFilter(new SimpleIR<float>(0.85));
+        derivative.y.addFilter(new SimpleIR<float>(0.85));
+        derivative.z.addFilter(new SimpleIR<float>(0.85));
     }
     Point3D<float> run(Vector<float> current, Point3D<float> desired) {
         Vector<float> error;
@@ -41,6 +41,12 @@ public:
         values.y.update(proportional.y.value + integral.y.value + derivative.y.value);
         values.z.update(proportional.z.value + integral.z.value + derivative.z.value);
         return values;
+    }
+    void reset() {
+        proportional.resetVals();
+        integral.resetVals();
+        derivative.resetVals();
+        values.resetVals();
     }
     Point3D<float> run(Point3D<float> current, Point3D<float> desired) {return run(current.getVector(), desired);}
     virtual String getClassName() {return "PID";}

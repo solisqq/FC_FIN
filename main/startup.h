@@ -18,11 +18,7 @@ void initialize(){
 	}
 	Output::info("IMU initialized properly.");
 	rx.initialize(21, 7, 0.8);
-	if(!rx.isActive() && Settings::RX::stopOnFail) {
-		Exception rxFail = Exception(Exception::Type::Error, "RX", "No signal");
-		Output::throwExc(rxFail);
-		EXCEPTION_HOLD(rx.isActive(),rxFail);
-	}
+	rx.initCheckRadio();
 	cmd.setDebugClearOnCMD(debugger,"clear");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, rx, "rx");

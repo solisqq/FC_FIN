@@ -1,6 +1,8 @@
 #pragma once
 #include "startup.h"
 
+bool previousArmSwitchState = false;
+
 void mainLoop()
 {
     imu.update();
@@ -9,16 +11,24 @@ void mainLoop()
             rx.update();
     if (debugTimer.IsReady())
             debugger.Show();
-            
-    if (rx.Switch[1].get() > 0.8)
+
+    if (rx.isSafetySwitchOn())
     {
-        if (imu.dataReady == true)
-        {
-            copter.setState(Steering::State::Flying);
-            imu.dataReady = false;
+        if(rx.isThrottleHigh() && !previousArmSwitchState) {
+            copter.setState(Steering::State::Idle);
+            copter.stop();
+            Output::info("Throttle high, unable to start");
+        } else {
+            previousArmSwitchState = true;
+            if (imu.dataReady == true)
+            {
+                copter.setState(Steering::State::Flying);
+                imu.dataReady = false;
+            }
         }
     }
     else {
+        previousArmSwitchState = false;
         copter.setState(Steering::State::Idle);
         copter.stop();
         

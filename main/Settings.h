@@ -32,6 +32,14 @@ public:
         static bool stopOnFail;
         static float threshold;
         static float yawDivider;
+        static bool stopOnThrottleHigh;
+        static bool stopOnSwitchHighOnInit;
+        static int safeThrottle;
+        class ID {
+        public:
+            static int throttle;
+            static int arm;
+        };
     };
     class PID
     {
@@ -77,16 +85,21 @@ int16_t Settings::Accel::oneGAsInt = 8192;
 int16_t Settings::Accel::xOffset = 0;
 int16_t Settings::Accel::yOffset = 0;
 
-bool Settings::RX::stopOnFail = false;
+bool Settings::RX::stopOnFail = true;
+bool Settings::RX::stopOnThrottleHigh = true;
+bool Settings::RX::stopOnSwitchHighOnInit = true;
 float Settings::RX::threshold = 0.4;
 float Settings::RX::yawDivider = 4;
+int Settings::RX::safeThrottle = 1080;
+int Settings::RX::ID::throttle = 0;
+int Settings::RX::ID::arm = 5;
 
 int Settings::PID::freq = 300;
 float Settings::PID::dt = 1.0/Settings::PID::freq;
 //----------------------------------------------R----P-----Y----
 Vector<float> Settings::PID::P = Vector<float>(0.0, 0.0, 0.0);
 Vector<float> Settings::PID::I = Vector<float>(0.0, 0.0, 0.0);
-Vector<float> Settings::PID::D = Vector<float>(1.0, 1.0, 1.0);
+Vector<float> Settings::PID::D = Vector<float>(0.7, 0.7, 0.7);
 Vector<float> Settings::PID::DFilter = Vector<float>(100, 100, 150);
 
 float Settings::Math::constPI = 3.14159265358979323846;

@@ -86,6 +86,32 @@ String Receiver::toString()
 
     return msg;
 }
+void Receiver::initCheckRadio() {
+    delay(300);
+    if(!isActive() && Settings::RX::stopOnFail) {
+		Exception rxFail = Exception(Exception::Type::Error, "RX", "No signal");
+		Output::throwExc(rxFail);
+		EXCEPTION_HOLD(isActive(),rxFail);
+	}
+    if(isSafetySwitchOn() && Settings::RX::stopOnSwitchHighOnInit) {
+        Exception rxFail = Exception(Exception::Type::Error, "RX", "Arm switch is in high state.");
+		Output::throwExc(rxFail);
+		EXCEPTION_HOLD(!isSafetySwitchOn(),rxFail);
+    }
+	if(isThrottleHigh() && Settings::RX::stopOnThrottleHigh) {
+		Exception rxFail = Exception(Exception::Type::Error, "RX", "Throttle high.");
+		Output::throwExc(rxFail);
+		EXCEPTION_HOLD(!isThrottleHigh(),rxFail);
+	}
+}
+bool Receiver::isThrottleHigh() {
+    if(channel_length[Settings::RX::ID::throttle]>Settings::RX::safeThrottle) return true;
+    return false;
+}
+bool Receiver::isSafetySwitchOn() {
+    if(channel_length[Settings::RX::ID::arm]>Settings::RX::safeThrottle) return true;
+    return false;
+}
 Point3D<float> Receiver::getPoint3D() {
     Point3D<float> toRet;
     toRet.updateAll(getForPid(Roll.get()), getForPid(Pitch.get()), staticYaw);

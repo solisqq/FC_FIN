@@ -2,6 +2,8 @@
 #ifndef RECEIVER_H
 #define RECEIVER_H
 
+#include "../../main/Settings.h"
+#include "../../utilities/Exceptions/Exception.h"
 #include "../../infac/DebugItem.h"
 #include "../../structures/List.h"
 #include "../../utilities/Output/Output.h"
@@ -27,6 +29,9 @@ public:
     virtual String getClassName();
     virtual String getDebugMsg(bool raw=false);
     virtual String toString();
+    void initCheckRadio();
+    bool isThrottleHigh();
+    bool isSafetySwitchOn();
     float getForPid(float value);
     Point3D<float> getPoint3D();
     bool isActive();
