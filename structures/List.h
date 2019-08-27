@@ -41,7 +41,7 @@ public:
     void popBack() {
         if(Count<=0) return;
         Count--;
-        if(Count==1) {
+        if(Count==0) {
             delete front;
             front = nullptr;
             return;
@@ -54,7 +54,7 @@ public:
     void popFront() {
         if(Count<=0) return;
         Count--;
-        if(Count==1) {
+        if(Count==0) {
             delete front;
             front = nullptr;
             return;
@@ -63,6 +63,21 @@ public:
         Node* backup = front->next;
         delete front;
         front = backup;
+    }
+    Type getAndPopFront() {
+        if(Count<=0) return (Type)0;
+        Type toRet = front->val;
+        Count--;
+        if(Count==0) {
+            delete front;
+            front = nullptr;
+            return toRet;
+        }
+        front->next->prev = nullptr;
+        Node* backup = front->next;
+        delete front;
+        front = backup;
+        return toRet;
     }
     bool remove(const Type &_val) {
         Node *current = front;
@@ -96,6 +111,17 @@ public:
         Count = 0;
         front = back = nullptr;
     }
+    String toString() const {
+        String toRet="";
+        Node *current = front;
+        while(current!=nullptr) {
+            toRet+=String(current->val)+", ";
+            current = current->next;
+        }
+        return toRet;
+    }
+    Type getFront() {return front->val;}
+    Type getBack() {return last->val;}
     Node* top() { return front;}
     Node* last() { return back;}
     void Union(List<Type> list) {

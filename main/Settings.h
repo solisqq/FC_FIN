@@ -3,10 +3,25 @@
 #define SETTINGS_FC_H
 
 #include "../math/Point3D/Vector.h"
+#include "../structures/List.h"
+#include "../utilities/utilities.h"
+#include <string.h>
 
 class Settings
 {
+private:
 public:
+    class PID
+    {
+    public:
+        static int freq;
+        static float dt;
+        static Vector<float> P;
+        static Vector<float> I;
+        static Vector<float> D;
+        static Vector<float> DFilter;
+        static String toString();
+    };
     class Gyro
     {
     public:
@@ -42,16 +57,6 @@ public:
             static int arm;
         };
     };
-    class PID
-    {
-    public:
-        static int freq;
-        static float dt;
-        static Vector<float> P;
-        static Vector<float> I;
-        static Vector<float> D;
-        static Vector<float> DFilter;
-    };
     class Math
     {
     public:
@@ -60,6 +65,7 @@ public:
     class IMU {
         public:
         static float gyroStr;
+        static int calibTime;
     };
     class Engines {
         public:
@@ -77,11 +83,12 @@ public:
     public:
         static int CSPin;
     };
+    static void readFromFile(String settings);
 };
 
 float Settings::Gyro::cutOff = 70.0;
 int Settings::Gyro::freq = 8000;
-int Settings::Gyro::calibThreshold = 100;
+int Settings::Gyro::calibThreshold = 80;//100
 float Settings::Gyro::sensitivity = 120.0;
 
 float Settings::Accel::cutOff = 4.0;
@@ -113,6 +120,7 @@ Vector<float> Settings::PID::DFilter = Vector<float>(100, 100, 150);
 float Settings::Math::constPI = 3.14159265358979323846;
 
 float Settings::IMU::gyroStr = 0.9996;
+int Settings::IMU::calibTime = 50;//150
 
 int Settings::Engines::minimum = 1148;
 int Settings::Engines::maximum = 1832;
@@ -125,5 +133,18 @@ int Settings::Engines::pwmFreq = 12000;
 float Settings::Engines::multiplier = 1.0;
 
 int Settings::SD::CSPin = 17;
+
+void Settings::readFromFile(String settings) {
+    List<String> data = Utilities::explode(settings, '\n');
+    Output::printLine(data.toString());
+    PID::P = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
+    PID::I = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
+    PID::D = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
+    //PID::D = Vector<float>(nextItem(&data).toFloat(), nextItem(&data).toFloat(), nextItem(&data).toFloat());
+}
+
+String Settings::PID::toString() {
+    return Settings::PID::P.toString() + ", " + Settings::PID::I.toString() + ", " + Settings::PID::D.toString();
+}
 
 #endif

@@ -62,10 +62,10 @@ public:
 		return true;
     }
 	void update() {
-		if(gyro.dataReady()) {
+		//if(gyro.dataReady()) {
 			gyro.updateByMPU(mpu);
 			debug->CalculateFreq();
-		}
+		//}
 	 	if(accel.dataReady()) {
 			accel.updateByMPU(mpu);
 			sensorFusion();
@@ -140,7 +140,7 @@ private:
 					if(isInMotion(avgVal[0][i],avgVal[0][i-1],avgVal[1][i],avgVal[1][i-1],avgVal[2][i],avgVal[2][i-1], Settings::Gyro::calibThreshold)) {
 						Output::throwExc(Exception(Exception::Type::Warning, getClassName(), "calibration failed. Trying again..."));
 						delay(1000);
-						calibrate(150,Settings::Gyro::freq/10);
+						calibrate(Settings::IMU::calibTime,Settings::Gyro::freq/10);
 						return;
 					}
 				}

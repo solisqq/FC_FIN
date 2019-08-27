@@ -5,20 +5,15 @@ void CommandSystem::setDebugOnCMD(Debug &_debugger, DebugItem &_item, const Stri
 void CommandSystem::setDebugClearOnCMD(Debug &_debugger, const String &cmd) {
     commands.Insert(cmd, new DebugClear(_debugger));
 }
+void CommandSystem::setShow(const String &cmd) {
+    commands.Insert(cmd, new CMDShow());
+}
 bool CommandSystem::doActionOnCMD(const String &cmd) {
-    List<String> splited;
-    String current="";
-    for(int i=0; i<cmd.length(); i++) {
-        if(cmd[i]!=' ') {
-            current+=cmd[i];
-        } else {
-            splited.pushBack(current);
-            current = "";
-        }
-    }
-    Action *act = commands.Find(cmd);
+    List<String> splited = Utilities::explode(cmd,' ');
+    Action *act = commands.Find(splited.front->val);
+    splited.popFront();
     if(isValid(act)) {
-        act->execute(nullptr);
+        act->execute(splited);
         return true;
     }
     return false;

@@ -29,10 +29,10 @@ void initialize(){
 	cmd.setDebugOnCMD(debugger, pid.integral, "pid i");
 	cmd.setDebugOnCMD(debugger, pid.derivative, "pid d");
 	cmd.setDebugOnCMD(debugger, copter, "engines");
+	cmd.setShow("show");
 
 	copter.init(&imu, &rx, &pid, &debugger);
-	//xTaskCreatePinnedToCore(IMUCalculate,"TaskIMU",10000,NULL,1,&TaskIMU,1);
-	//mem.init(imu.cSPI);
-	//Output::printLine(mem.readSettings());
+	Settings::readFromFile(mem.readSettings(imu.cSPI));
+	
 }
 

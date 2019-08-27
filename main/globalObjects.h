@@ -14,7 +14,7 @@ Debug debugger;
 #include "Receiver/Receiver.h"
 #include "../utilities/Exceptions/Exception.h"
 #include "../sensors/IMU.h"
-//#include "../utilities/SDCard/SDCard.h"
+#include "../utilities/SDCard/SDCard.h"
 #include "Steering.h"
 #include "PID.h"
 
@@ -31,7 +31,7 @@ IMU imu;
 Receiver rx;
 Steering copter;
 
-//SDCard mem;
+SDCard mem;
 
 TaskHandle_t TaskIMU;
 

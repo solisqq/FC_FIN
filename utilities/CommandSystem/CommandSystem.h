@@ -14,6 +14,7 @@ public:
     void setDebugOnCMD(Debug &debugger, DebugItem &_item, const String &cmd);
     void setDebugClearOnCMD(Debug &_debugger, const String &cmd);
     bool doActionOnCMD(const String &cmd);
+    void setShow(const String &cmd);
 };
 
 #include "CommandSystem.cpp"
