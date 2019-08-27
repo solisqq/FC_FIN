@@ -4,19 +4,20 @@
 void mainLoop()
 {
     imu.update();
-
     if (rxTimer.IsReady())
-            rx.update();
+        rx.update();
     if (debugTimer.IsReady())
-            debugger.Show();
+        debugger.Show();
 
     if (rx.isSafetySwitchOn())
     {
-        if(rx.isThrottleHigh() && copter.currentState == Steering::State::Idle) {
+        if (rx.isThrottleHigh() && copter.currentState == Steering::State::Idle)
+        {
             copter.setState(Steering::State::Idle);
-            copter.stop();
             Output::info("Throttle high, unable to start");
-        } else {
+        }
+        else
+        {
             if (imu.dataReady == true)
             {
                 copter.setState(Steering::State::Flying);
@@ -24,18 +25,24 @@ void mainLoop()
             }
         }
     }
-    else {
-        copter.setState(Steering::State::Idle);
-        copter.stop();
-        
-        if (Serial.available())
+    else
+    {
+        if (imu.dataReady == true)
         {
-            char c = Serial.read();
-            if (c == '\n')
+            copter.setState(Steering::State::Idle);
+            imu.dataReady = false;
+
+            while (Serial.available())
             {
-                cmd.doActionOnCMD(command);
-                command = "";
-            } else command += c;
+                char c = Serial.read();
+                if (c == '\n')
+                {
+                    cmd.doActionOnCMD(command);
+                    command = "";
+                }
+                else
+                    command += c;
+            }
         }
     }
 }

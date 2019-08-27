@@ -6,7 +6,7 @@ String Output::newLine = "\n";
 String Output::bracketEnd = ")";
 String Output::bracketBegin = "(";
 
-long Output::baudRate = 230400;
+long Output::baudRate = 921600;
 
 void Output::initialize() {
     Serial.begin(baudRate);

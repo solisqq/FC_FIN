@@ -49,7 +49,7 @@ int MPU9250::begin(){
     digitalWrite(_csPin,HIGH);
     digitalWrite(baroPin,HIGH);
     // begin SPI communication
-    _spi->begin();
+    //_spi->begin();
   } else { // using I2C for communication
     // starting the I2C bus
     _i2c->begin();

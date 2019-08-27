@@ -29,6 +29,13 @@ public:
 			value = filters.back->val->filtered;
 		}
 	}
+	void reset() {
+		typename List<Filter<Type>*>::Node *current = filters.front;
+		if(current!=nullptr) {
+			filters.front->val->reset();
+			current = current->next;
+		}
+	}
 	void addFilter(Filter<Type>* filter) {
 		filters.pushBack(filter);
 	}

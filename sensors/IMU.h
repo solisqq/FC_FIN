@@ -18,9 +18,10 @@
 
 class IMU : public DebugItem {
 private:
-    SPIClass *MPUSPI;
     MPU9250 *mpu;
 public:
+	Debug *debug;
+	SPIClass *cSPI;
 	FilterableValue<float> compStrX;
 	FilterableValue<float> compStrY;
 	bool dataReady=false;
@@ -28,9 +29,9 @@ public:
 	Accel accel;
 	Point3D<float> eulers; 
     IMU(){}
-    bool initialize(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS) {
+    bool initialize(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS, Debug* dbg=nullptr) {
 		if(!connect(MPU_SCK, MPU_MOSI, MPU_MISO, MPU_CS)) return false;
-
+		debug = dbg;
         setDefault();
 
 		gyro.initialize(Settings::Gyro::freq);
@@ -58,14 +59,14 @@ public:
 		eulers.z.value = 0;
 		eulers.y.value = accelData.y;
 		eulers.x.value = accelData.x;
-
 		return true;
     }
 	void update() {
-		if(gyro.dataReady()) 
+		if(gyro.dataReady()) {
 			gyro.updateByMPU(mpu);
-
-		if(accel.dataReady()) {
+			debug->CalculateFreq();
+		}
+	 	if(accel.dataReady()) {
 			accel.updateByMPU(mpu);
 			sensorFusion();
 		}
@@ -93,9 +94,10 @@ private:
 		dataReady = true;
 	}
     bool connect(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS) {
-		MPUSPI = new SPIClass();
-		MPUSPI->begin(MPU_SCK,MPU_MOSI,MPU_MISO);
-		mpu = new MPU9250(*MPUSPI, MPU_CS);
+		cSPI = new SPIClass();
+		cSPI->setFrequency(20000000);
+		cSPI->begin(MPU_SCK,MPU_MOSI,MPU_MISO);
+		mpu = new MPU9250(*cSPI, MPU_CS);
 		if(mpu->begin()==1) return true;
 		else return false;
 	}

@@ -14,6 +14,7 @@ Debug debugger;
 #include "Receiver/Receiver.h"
 #include "../utilities/Exceptions/Exception.h"
 #include "../sensors/IMU.h"
+//#include "../utilities/SDCard/SDCard.h"
 #include "Steering.h"
 #include "PID.h"
 
@@ -23,7 +24,19 @@ PID pid;
 
 Timer debugTimer;
 Timer rxTimer;
+Timer inputTimer;
+String command;
 
 IMU imu;
 Receiver rx;
 Steering copter;
+
+//SDCard mem;
+
+TaskHandle_t TaskIMU;
+
+void IMUCalculate(void * parameter) {
+    for(;;) {
+        imu.update();
+    }
+}

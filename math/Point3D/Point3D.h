@@ -33,6 +33,9 @@ public:
 		z.update(vect.z);
 	}
 	void resetVals() {
+		x.reset();
+		y.reset();
+		z.reset();
 		x.value = 0;
 		y.value = 0;
 		z.value = 0;

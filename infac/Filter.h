@@ -8,6 +8,7 @@ public:
 	Type filtered;
 	void setVal(Type *_val) {filtered = _val;}
 	virtual void update(Type newVal) = 0;
+	void reset() {filtered=0.0;}
 	List<Filter<Type>*> operator+(const Filter<Type> &b) {
 		List<Filter<Type>*> list;
 		list.pushBack(this);

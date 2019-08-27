@@ -73,6 +73,10 @@ public:
         static int pwmFreq;
         static float multiplier;
     };
+    class SD {
+    public:
+        static int CSPin;
+    };
 };
 
 float Settings::Gyro::cutOff = 70.0;
@@ -101,9 +105,9 @@ int Settings::PID::freq = 1000;
 float Settings::PID::dt = 1.0/Settings::PID::freq;
 //----------------------------------------------R----P-----Y----
 //Vector<float> Settings::PID::P = Vector<float>(2.5, 2.5, 1.5);
-Vector<float> Settings::PID::P = Vector<float>(0, 0, 0);
+Vector<float> Settings::PID::P = Vector<float>(0.0, 0.0, 0.0);
 Vector<float> Settings::PID::I = Vector<float>(0.0, 0.0, 0.0);
-Vector<float> Settings::PID::D = Vector<float>(1.0, 1.0, 1.0);
+Vector<float> Settings::PID::D = Vector<float>(2.0, 2.0, 1.5);
 Vector<float> Settings::PID::DFilter = Vector<float>(100, 100, 150);
 
 float Settings::Math::constPI = 3.14159265358979323846;
@@ -120,5 +124,6 @@ int Settings::Engines::br = 25; //25
 int Settings::Engines::pwmFreq = 12000;
 float Settings::Engines::multiplier = 1.0;
 
+int Settings::SD::CSPin = 17;
 
 #endif

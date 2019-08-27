@@ -1,7 +1,6 @@
 #pragma once
 #include "globalObjects.h"
 
-String command;
 
 void initialize(){
 	Output::initialize();
@@ -10,8 +9,9 @@ void initialize(){
 
 	debugTimer.Init(10);
 	rxTimer.Init(20);
+	inputTimer.Init(100);
 
-	if(!imu.initialize(18,19,23,22)) {
+	if(!imu.initialize(18,19,23,22,&debugger)) {
 		Output::throwExc(Exception(Exception::Type::Critical, "IMU", "Can't connect"));
 		WAIT_LONG;
 		ESP.restart();
@@ -22,7 +22,6 @@ void initialize(){
 	cmd.setDebugClearOnCMD(debugger,"clear");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, rx, "rx");
-	//cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, imu.accel, "accel");
 	cmd.setDebugOnCMD(debugger, imu, "imu");
 	cmd.setDebugOnCMD(debugger, pid, "pid");
@@ -32,5 +31,8 @@ void initialize(){
 	cmd.setDebugOnCMD(debugger, copter, "engines");
 
 	copter.init(&imu, &rx, &pid, &debugger);
+	//xTaskCreatePinnedToCore(IMUCalculate,"TaskIMU",10000,NULL,1,&TaskIMU,1);
+	//mem.init(imu.cSPI);
+	//Output::printLine(mem.readSettings());
 }
 
