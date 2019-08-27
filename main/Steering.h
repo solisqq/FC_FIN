@@ -17,6 +17,7 @@ public:
         Calibrate = 3
     };
     PID pid;
+    State currentState = State::Idle;
 private:
     Engine frontLeft;
     Engine frontRight;
@@ -24,7 +25,6 @@ private:
     Engine backRight;
     Engine **engines;
     
-    State currentState = State::Idle;
     Receiver *_rx;
     IMU *_imu;
     PID *_pid;
@@ -52,8 +52,6 @@ public:
         backRight.Init(Settings::Engines::br);
 
         delay(200);
-        //calibrate();
-        //test();
     }
     void setState(State state) {
         currentState = state;
@@ -61,24 +59,17 @@ public:
             stop();
             _pid->reset();
         }
-        else if(currentState==State::Flying) {
+        else if(currentState==State::Flying) 
             setThrottle();
-        }
     }
     void setThrottle() {
         if(currentState==State::Flying) {
-            accumulatedEulers = accumulatedEulers + _imu->eulers.getVector();
-            accumulationCounter++;
-            if(_pid->timer.IsReady()) {
-                accumulatedEulers = accumulatedEulers/accumulationCounter;
-                Vector<float> pidV = _pid->run(Point3D<float>::toPoint3D(accumulatedEulers), _rx->getPoint3D()).getVector();
-                frontLeft.SetSpeed(max(_rx->Throttle.get() - pidV.y + pidV.x + pidV.z, Settings::Engines::start));
-                frontRight.SetSpeed(max(_rx->Throttle.get() - pidV.y - pidV.x - pidV.z, Settings::Engines::start));
-                backLeft.SetSpeed(max(_rx->Throttle.get() + pidV.y + pidV.x - pidV.z, Settings::Engines::start));
-                backRight.SetSpeed(max(_rx->Throttle.get() + pidV.y - pidV.x + pidV.z, Settings::Engines::start));
-                accumulationCounter=1;
-            }
-            
+            Vector<float> pidV = _pid->run(_imu->eulers, _rx->getPoint3D()).getVector();
+            frontLeft.SetSpeed(max(_rx->Throttle.get() - pidV.y + pidV.x + pidV.z, Settings::Engines::start));
+            frontRight.SetSpeed(max(_rx->Throttle.get() - pidV.y - pidV.x - pidV.z, Settings::Engines::start));
+            backLeft.SetSpeed(max(_rx->Throttle.get() + pidV.y + pidV.x - pidV.z, Settings::Engines::start));
+            backRight.SetSpeed(max(_rx->Throttle.get() + pidV.y - pidV.x + pidV.z, Settings::Engines::start));
+            accumulationCounter=1;
         } else stop();
     }
     void calibrate() {

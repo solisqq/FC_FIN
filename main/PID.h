@@ -9,6 +9,7 @@
 #include "../utilities/Output/Output.h"
 #include "../utilities/Timer/Timer.h"
 #include "../filters/SimpleIR.h"
+#include "../filters/ButterworthLP.h"
 
 class PID : public DebugItem
 {
@@ -23,9 +24,9 @@ public:
 
     PID(/* args */) {
         timer.Init(1000000/Settings::PID::freq,true);
-        derivative.x.addFilter(new SimpleIR<float>(0.85));
-        derivative.y.addFilter(new SimpleIR<float>(0.85));
-        derivative.z.addFilter(new SimpleIR<float>(0.85));
+        derivative.x.addFilter(new ButterworthLP<float>(1000,200));
+        derivative.y.addFilter(new ButterworthLP<float>(1000,200));
+        derivative.z.addFilter(new ButterworthLP<float>(1000,200));
     }
     Point3D<float> run(Vector<float> current, Point3D<float> desired) {
         Vector<float> error;

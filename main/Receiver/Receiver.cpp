@@ -105,11 +105,11 @@ void Receiver::initCheckRadio() {
 	}
 }
 bool Receiver::isThrottleHigh() {
-    if(channel_length[Settings::RX::ID::throttle]>Settings::RX::safeThrottle) return true;
+    if(Throttle.get()>Settings::RX::safeThrottle) return true;
     return false;
 }
 bool Receiver::isSafetySwitchOn() {
-    if(channel_length[Settings::RX::ID::arm]>Settings::RX::safeThrottle) return true;
+    if(Switch[1].get()>1) return true;
     return false;
 }
 Point3D<float> Receiver::getPoint3D() {

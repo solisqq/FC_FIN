@@ -17,7 +17,7 @@ void initialize(){
 		ESP.restart();
 	}
 	Output::info("IMU initialized properly.");
-	rx.initialize(21, 7, 0.8);
+	rx.initialize(21, 7, Settings::RX::IRStr);
 	rx.initCheckRadio();
 	cmd.setDebugClearOnCMD(debugger,"clear");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");

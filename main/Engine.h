@@ -11,7 +11,7 @@ public:
 	void Init(int pin) {
 		pinID = pin;
 		myChannel = channelPinAvailable;
-		ledcSetup(myChannel, 400, 11);
+		ledcSetup(myChannel, Settings::Engines::pwmFreq, 11);
 		ledcAttachPin(pin, myChannel);
 		channelPinAvailable++;
 		SetSpeed(Settings::Engines::minimum);
@@ -24,7 +24,7 @@ public:
 		else
 			speed=newSpeed;
 			
-		ledcWrite(myChannel,speed);
+		ledcWrite(myChannel,speed*Settings::Engines::multiplier);
 	}
 	void Stop() {
 		SetSpeed(Settings::Engines::minimum);
