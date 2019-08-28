@@ -18,7 +18,7 @@ void initialize(){
 	}
 	Output::info("IMU initialized properly.");
 	rx.initialize(21, 7, Settings::RX::IRStr);
-	rx.initCheckRadio();
+	//rx.initCheckRadio(); //UNCOMMENT IF NO !!!__!_TESTING
 	cmd.setDebugClearOnCMD(debugger,"clear");
 	cmd.setDebugOnCMD(debugger, imu.gyro, "gyro");
 	cmd.setDebugOnCMD(debugger, rx, "rx");
@@ -30,6 +30,11 @@ void initialize(){
 	cmd.setDebugOnCMD(debugger, pid.derivative, "pid d");
 	cmd.setDebugOnCMD(debugger, copter, "engines");
 	cmd.setShow("show");
+	cmd.setSet(&mem, imu.cSPI, "setP", &Settings::PID::P);
+	cmd.setSet(&mem, imu.cSPI, "setI", &Settings::PID::I);
+	cmd.setSet(&mem, imu.cSPI, "setD", &Settings::PID::D);
+	cmd.setSet(&mem, imu.cSPI, "setXO", &Settings::Accel::xOffset);
+	cmd.setSet(&mem, imu.cSPI, "setYO", &Settings::Accel::yOffset);
 
 	copter.init(&imu, &rx, &pid, &debugger);
 	Settings::readFromFile(mem.readSettings(imu.cSPI));

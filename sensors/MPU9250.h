@@ -58,6 +58,7 @@ class MPU9250{
     int disableDataReadyInterrupt();
     int enableWakeOnMotion(float womThresh_mg,LpAccelOdr odr);
     int readSensor();
+    bool isDataReady();
     int readBaro();
     void readRawMag(Vector<int16_t> *magRaw);
     void readRaw(Vector<int16_t> *accelRaw,Vector<int16_t> *gyroRaw, int *temperature/*,Vector<int16_t> *magnetRaw*/);

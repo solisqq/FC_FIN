@@ -15,6 +15,7 @@
 #include "../filters/Complementary.h"
 #include "Accel/Accel.h"
 #include "../filters/Mapper.h"
+#include "../utilities/Timer/DeltaTime.h"
 
 class IMU : public DebugItem {
 private:
@@ -28,6 +29,9 @@ public:
     Gyro gyro; 
 	Accel accel;
 	Point3D<float> eulers; 
+
+	DeltaTime deltaT;
+
     IMU(){}
     bool initialize(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS, Debug* dbg=nullptr) {
 		if(!connect(MPU_SCK, MPU_MOSI, MPU_MISO, MPU_CS)) return false;
@@ -40,7 +44,7 @@ public:
 		this->calibrate(150,Settings::Gyro::freq/10);
 
 		gyro.setLowPassFilter(Settings::Gyro::cutOff);
-		gyro.setAvgFilter(Settings::Gyro::freq/Settings::PID::freq);
+		//gyro.setAvgFilter(Settings::Gyro::freq/Settings::PID::freq);
 		accel.setLowPassFilter(Settings::Accel::cutOff);
 		compStrX.addFilter(new Mapper<float>(16384, -16384, -0.025, 0.025));
 		compStrY.addFilter(new Mapper<float>(16384, -16384, -0.025, 0.025));
@@ -62,19 +66,25 @@ public:
 		return true;
     }
 	void update() {
-		//if(gyro.dataReady()) {
+		if(mpu->isDataReady()) {
 			gyro.updateByMPU(mpu);
 			debug->CalculateFreq();
-		//}
+		}
 	 	if(accel.dataReady()) {
-			accel.updateByMPU(mpu);
-			sensorFusion();
+			Vector<float> gyroData = gyro.getDegPerSec();
+			//accel.updateByMPU(mpu);
+			//sensorFusion();
 		}
 	}
 private:
 	void sensorFusion() {
+		double dt = Settings::PID::dt;
+        if(deltaT.isSet()) dt = deltaT.calcInMS();
+
 		Vector<float> gyroData = gyro.getDegPerSec();
 		Vector<float> accelData = accel.getEulers(eulers);
+		accelData.x = accelData.x+Settings::Accel::xOffset;
+		accelData.y = accelData.y+Settings::Accel::yOffset;
 
 		compStrX.update(gyro.values.x.value);
 		compStrY.update(gyro.values.y.value);
@@ -85,7 +95,8 @@ private:
 		if(compStrX_converted>1.0) compStrX_converted = 1.0;
 		if(compStrY_converted>1.0) compStrY_converted = 1.0;
 
-		gyroData *= Settings::PID::dt;
+		gyroData *= dt;
+
 		gyroData.x += eulers.x.value;
 		gyroData.y += eulers.y.value;
 		eulers.x.value = (gyroData.x * compStrX_converted) + (accelData.x*(1.0-compStrX_converted));
@@ -95,8 +106,9 @@ private:
 	}
     bool connect(short int MPU_SCK, short int MPU_MOSI, short int MPU_MISO, short int MPU_CS) {
 		cSPI = new SPIClass();
-		cSPI->setFrequency(20000000);
 		cSPI->begin(MPU_SCK,MPU_MOSI,MPU_MISO);
+		cSPI->setFrequency(20000000);
+		cSPI->setClockDivider(SPI_CLOCK_DIV2);
 		mpu = new MPU9250(*cSPI, MPU_CS);
 		if(mpu->begin()==1) return true;
 		else return false;
@@ -110,6 +122,7 @@ private:
 		//GYRO 8800Hz, No DLPF
 	  	mpu->writeRegister(mpu->CONFIG, 0x00);
 	  	mpu->writeRegister(mpu->GYRO_CONFIG, 0x00);
+		mpu->enableDataReadyInterrupt();
 	  	//100HZ 16bits
 	  	
 	  	//ACCEL 4G range
@@ -158,8 +171,6 @@ private:
 		gyro.values.x.addFilter(new Offset<int16_t>(offsets[0]));
 		gyro.values.y.addFilter(new Offset<int16_t>(offsets[1]));
 		gyro.values.z.addFilter(new Offset<int16_t>(offsets[2]));
-		accel.values.x.addFilter(new Offset<int16_t>(Settings::Accel::xOffset));
-		accel.values.y.addFilter(new Offset<int16_t>(Settings::Accel::yOffset));
 		accel.values.z.addFilter(new Offset<int16_t>(offsets[3]-Settings::Accel::oneGAsInt));
 		Output::info("Calibrating done!");
 	}

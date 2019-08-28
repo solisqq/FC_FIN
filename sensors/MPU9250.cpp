@@ -356,7 +356,11 @@ int MPU9250::setSrd(uint8_t srd) {
   _srd = srd;
   return 1; 
 }
-
+bool MPU9250::isDataReady() {
+  readRegisters(0x3A, 1, _buffer);
+  if(_buffer & 1 == 1) return true;
+  return false;
+}
 /* enables the data ready interrupt */
 int MPU9250::enableDataReadyInterrupt() {
   // use low speed SPI for register setting
@@ -1080,12 +1084,12 @@ int MPU9250::writeRegister(uint8_t subAddress, uint8_t data){
 int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t* dest){
   if( _useSPI ){
     // begin the transaction
-    if(_useSPIHS){
+    //if(_useSPIHS){
       _spi->beginTransaction(SPISettings(SPI_HS_CLOCK, MSBFIRST, SPI_MODE3));
-    }
+    /*}
     else{
       _spi->beginTransaction(SPISettings(SPI_LS_CLOCK, MSBFIRST, SPI_MODE3));
-    }
+    }*/
     digitalWrite(_csPin,LOW); // select the MPU9250 chip
     _spi->transfer(subAddress | SPI_READ); // specify the starting register address
     for(uint8_t i = 0; i < count; i++){

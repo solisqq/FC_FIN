@@ -32,8 +32,12 @@ public:
         values.y.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
         values.z.addFilter(new ButterworthLP<int16_t>(dataReadFrequency, cutOff));
     }
-    bool update(int16_t x, int16_t y, int16_t z) { values.updateAll(x, y, z); }
-    bool update(Vector<int16_t> vect) { values.updateAll(vect.x, vect.y, vect.z); }
+    bool update(int16_t x, int16_t y, int16_t z) { 
+        values.updateAll(x, y, z); 
+    }
+    bool update(const Vector<int16_t> &vect) { 
+        values.updateAll(vect); 
+    }
     bool dataReady() { return timer.IsReady(); }
     virtual String toString()
     {

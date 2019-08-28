@@ -22,8 +22,7 @@ public:
             values.pushBack(newVal);
             return;
         }
-        values.popFront();
-        values.pushBack(newVal);
+        values.FIFO(newVal);
     }
     Type getAvg() {
         if(values.Count==count) 

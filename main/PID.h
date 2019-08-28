@@ -7,7 +7,7 @@
 #include "Settings.h"
 #include "../infac/DebugItem.h"
 #include "../utilities/Output/Output.h"
-#include "../utilities/Timer/Timer.h"
+#include "../utilities/Timer/DeltaTime.h"
 #include "../filters/SimpleIR.h"
 #include "../filters/ButterworthLP.h"
 
@@ -15,26 +15,28 @@ class PID : public DebugItem
 {
 private:
     Vector<float> preError;
+    DeltaTime deltaT;
 public:
     Point3D<float> values;
     Point3D<float> proportional;
     Point3D<float> integral;
     Point3D<float> derivative;
-    Timer timer;
-
+    
     PID(/* args */) {
-        timer.Init(1000000/Settings::PID::freq,true);
-        derivative.x.addFilter(new ButterworthLP<float>(1000,200));
-        derivative.y.addFilter(new ButterworthLP<float>(1000,200));
-        derivative.z.addFilter(new ButterworthLP<float>(1000,200));
+        derivative.x.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
+        derivative.y.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
+        derivative.z.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
     }
     Point3D<float> run(Vector<float> current, Point3D<float> desired) {
+        double dt = Settings::PID::dt;
+        if(deltaT.isSet()) dt = deltaT.calcInMS();
+        
         Vector<float> error;
         error = desired.getVector() - current;
         
         proportional.updateAll(error*Settings::PID::P);
-        integral.updateAll((error*Settings::PID::dt)*Settings::PID::I);
-        derivative.updateAll(((error-preError)/Settings::PID::dt)*Settings::PID::D);
+        integral.updateAll((error*dt)*Settings::PID::I);
+        derivative.updateAll(((error-preError)/dt)*Settings::PID::D);
         
         preError = error;
 

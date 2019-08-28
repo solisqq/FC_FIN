@@ -16,15 +16,27 @@ public:
     
     String readSettings(SPIClass *SPIConn){
         SD.begin(Settings::SD::CSPin, *SPIConn);
+        Output::info("Loading data from memory card...");
         delay(300);
         String toRet="";
-        String path = "/set.txt";
-        File file = SD.open(path);
+        File file = SD.open("/set.txt");
         if(!file){Output::info("Failed to open SDCard.");return "ERR";}
         while(file.available()) toRet+=static_cast<char>(file.read());
         file.close();
         SD.end();
+        Output::info("Data loaded.");
         return toRet;
+    }
+    void writeSettings(SPIClass *SPIConn, String msg) {
+        Output::info("Saving data to memory card...");
+        SD.begin(Settings::SD::CSPin, *SPIConn);
+        delay(300);
+        File file = SD.open("/set.txt", FILE_WRITE);
+        if(!file)return;
+        file.print(msg);
+        file.close();
+        SD.end();
+        Output::info("Saved.");
     }
 };
 

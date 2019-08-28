@@ -8,6 +8,7 @@ void CommandSystem::setDebugClearOnCMD(Debug &_debugger, const String &cmd) {
 void CommandSystem::setShow(const String &cmd) {
     commands.Insert(cmd, new CMDShow());
 }
+
 bool CommandSystem::doActionOnCMD(const String &cmd) {
     List<String> splited = Utilities::explode(cmd,' ');
     Action *act = commands.Find(splited.front->val);
@@ -18,3 +19,9 @@ bool CommandSystem::doActionOnCMD(const String &cmd) {
     }
     return false;
 }
+
+void CommandSystem::setSet(SDCard *_memory, SPIClass *_cSPI, const String &cmd, float *val) {commands.Insert(cmd, new CMDSet(_memory, _cSPI, val));}
+void CommandSystem::setSet(SDCard *_memory, SPIClass *_cSPI, const String &cmd, double *val) {commands.Insert(cmd, new CMDSet(_memory, _cSPI, val));}
+void CommandSystem::setSet(SDCard *_memory, SPIClass *_cSPI, const String &cmd, Vector<float> *val) {commands.Insert(cmd, new CMDSet(_memory, _cSPI, val));}
+void CommandSystem::setSet(SDCard *_memory, SPIClass *_cSPI, const String &cmd, int *val) {commands.Insert(cmd, new CMDSet(_memory, _cSPI, val));}
+void CommandSystem::setSet(SDCard *_memory, SPIClass *_cSPI, const String &cmd, String *val) {commands.Insert(cmd, new CMDSet(_memory, _cSPI, val));}

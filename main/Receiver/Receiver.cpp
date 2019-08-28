@@ -21,9 +21,9 @@ void Receiver::initialize(int RTX_PIN, int medianStr, float irStr)
         Channels[i]->addFilter(new Mapper<float>(2000.0, 1000.0, 0.01, 2.0));
         Channels[j]->addFilter(new ExpHighPass<float>(0.3, 10.0));
     }
-    Channels[1]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.4));
-    Channels[2]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.4));
-    Channels[3]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.1));
+    Channels[1]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, Settings::RX::Expo));
+    Channels[2]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, Settings::RX::Expo));
+    Channels[3]->addFilter(new Exponential<float>(2000.0, 1000.0, -25.0, 25.0, 1.0));
     Channels[0]->addFilter(new Mapper<float>(2000.0, 1000.0, Settings::Engines::start+80, Settings::Engines::maximum-80));
     Switch[1].setAsSwitch(2);
 }

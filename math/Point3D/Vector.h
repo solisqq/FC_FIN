@@ -10,20 +10,11 @@ class Vector : public AllowPrint
 {
 public:
 	Type x, y, z;
-	Vector()
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-	}
-	Vector(Type val)
-	{
-		x = val;
-		y = val;
-		z = val;
-	}
+	Vector() : x(0), y(0), z(0) {}
+	Vector(Type val) : x(val), y(val), z(val) {}
 	Vector(bool nulify) {}
 	Vector(Type x, Type y, Type z) : x(x), y(y), z(z) {}
+	Vector(const Vector<Type> &vect){x = vect.x;y = vect.y;z = vect.z;}
 	Vector<Type> InvertXY()
 	{
 		Vector<Type> inverted(this->y * (-1), this->x * (-1), this->z);
@@ -94,7 +85,7 @@ public:
 		this->z /= right;
 		return *this;
 	}
-	
+
 	Vector<Type> operator-=(const Vector<Type> &right)
 	{
 		this->x -= right.x;

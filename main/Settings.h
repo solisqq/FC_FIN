@@ -19,7 +19,7 @@ public:
         static Vector<float> P;
         static Vector<float> I;
         static Vector<float> D;
-        static Vector<float> DFilter;
+        static float DFilter;
         static String toString();
     };
     class Gyro
@@ -38,8 +38,8 @@ public:
         static float cutOff;
         static float range;
         static int16_t oneGAsInt;
-        static int16_t xOffset;
-        static int16_t yOffset;
+        static float xOffset;
+        static float yOffset;
     };
     class RX
     {
@@ -51,6 +51,7 @@ public:
         static bool stopOnSwitchHighOnInit;
         static int safeThrottle;
         static float IRStr;
+        static float Expo;
         class ID {
         public:
             static int throttle;
@@ -84,6 +85,7 @@ public:
         static int CSPin;
     };
     static void readFromFile(String settings);
+    static String getSettingsFileString();
 };
 
 float Settings::Gyro::cutOff = 70.0;
@@ -95,8 +97,8 @@ float Settings::Accel::cutOff = 4.0;
 int Settings::Accel::freq = 1000;
 float Settings::Accel::range = 4.0;
 int16_t Settings::Accel::oneGAsInt = 8192;
-int16_t Settings::Accel::xOffset = 0;
-int16_t Settings::Accel::yOffset = 0;
+float Settings::Accel::xOffset = -1.0;
+float Settings::Accel::yOffset = -5.0;
 
 bool Settings::RX::stopOnFail = true;
 bool Settings::RX::stopOnThrottleHigh = true;
@@ -106,7 +108,8 @@ float Settings::RX::yawDivider = 4;
 int Settings::RX::safeThrottle = 1320;
 int Settings::RX::ID::throttle = 0;
 int Settings::RX::ID::arm = 5;
-float Settings::RX::IRStr = 0.65;
+float Settings::RX::IRStr = 0.91;
+float Settings::RX::Expo = 1.1;
 
 int Settings::PID::freq = 1000;
 float Settings::PID::dt = 1.0/Settings::PID::freq;
@@ -114,13 +117,13 @@ float Settings::PID::dt = 1.0/Settings::PID::freq;
 //Vector<float> Settings::PID::P = Vector<float>(2.5, 2.5, 1.5);
 Vector<float> Settings::PID::P = Vector<float>(0.0, 0.0, 0.0);
 Vector<float> Settings::PID::I = Vector<float>(0.0, 0.0, 0.0);
-Vector<float> Settings::PID::D = Vector<float>(2.0, 2.0, 1.5);
-Vector<float> Settings::PID::DFilter = Vector<float>(100, 100, 150);
+Vector<float> Settings::PID::D = Vector<float>(1.0, 1.0, 1.0);
+float Settings::PID::DFilter = 140;
 
 float Settings::Math::constPI = 3.14159265358979323846;
 
 float Settings::IMU::gyroStr = 0.9996;
-int Settings::IMU::calibTime = 50;//150
+int Settings::IMU::calibTime = 150;//150
 
 int Settings::Engines::minimum = 1148;
 int Settings::Engines::maximum = 1832;
@@ -136,15 +139,44 @@ int Settings::SD::CSPin = 17;
 
 void Settings::readFromFile(String settings) {
     List<String> data = Utilities::explode(settings, '\n');
+    if(data.Count<8) return;
     Output::printLine(data.toString());
     PID::P = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
     PID::I = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
     PID::D = Vector<float>(data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat(), data.getAndPopFront().toFloat());
-    //PID::D = Vector<float>(nextItem(&data).toFloat(), nextItem(&data).toFloat(), nextItem(&data).toFloat());
+    Settings::Accel::xOffset = data.getAndPopFront().toFloat();
+    Settings::Accel::yOffset = data.getAndPopFront().toFloat();
+
+    Settings::PID::DFilter = data.getAndPopFront().toFloat();
+    Settings::RX::Expo = data.getAndPopFront().toFloat();
+    Settings::RX::IRStr = data.getAndPopFront().toFloat();
+    Settings::Accel::cutOff = data.getAndPopFront().toFloat();
+    Settings::Gyro::cutOff = data.getAndPopFront().toFloat();
+    Settings::IMU::gyroStr = data.getAndPopFront().toFloat();
 }
 
 String Settings::PID::toString() {
     return Settings::PID::P.toString() + ", " + Settings::PID::I.toString() + ", " + Settings::PID::D.toString();
 }
-
+String Settings::getSettingsFileString() {
+    String toRet = "";
+    toRet+=(String)PID::P.x+'\n';
+    toRet+=(String)PID::P.y+'\n';
+    toRet+=(String)PID::P.z+'\n';
+    toRet+=(String)PID::I.x+'\n';
+    toRet+=(String)PID::I.y+'\n';
+    toRet+=(String)PID::I.z+'\n';
+    toRet+=(String)PID::D.x+'\n';
+    toRet+=(String)PID::D.y+'\n';
+    toRet+=(String)PID::D.z+'\n';
+    toRet+=(String)Settings::Accel::xOffset+'\n';
+    toRet+=(String)Settings::Accel::yOffset+'\n';
+    toRet+=(String)Settings::PID::DFilter+'\n';
+    toRet+=(String)Settings::RX::Expo+'\n';
+    toRet+=(String)Settings::RX::IRStr+'\n';
+    toRet+=(String)Settings::Accel::cutOff+'\n';
+    toRet+=(String)Settings::Gyro::cutOff+'\n';
+    toRet+=(String)Settings::IMU::gyroStr+'\n';
+    return toRet;
+}
 #endif

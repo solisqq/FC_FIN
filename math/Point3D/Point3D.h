@@ -27,7 +27,7 @@ public:
 		y.update(_y);
 		z.update(_z);
 	}
-	void updateAll(Vector<Type> vect) {
+	void updateAll(const Vector<Type> &vect) {
 		x.update(vect.x);
 		y.update(vect.y);
 		z.update(vect.z);

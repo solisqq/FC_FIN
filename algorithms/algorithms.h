@@ -44,5 +44,14 @@ public:
         
         return val/_list.Count;
     }
+    static Vector<float> calcAvg(const List<Vector<Type>> &_list) {
+        Vector<float> val = Vector<float>(0.0f);
+        for(typename List<Vector<Type>>::Node *current = _list.front; current!=nullptr; current = current->next) {
+            val.x += current->val.x;
+            val.y += current->val.y;
+            val.z += current->val.z;
+        }
+        return val/_list.Count;
+    }
 };
 #endif

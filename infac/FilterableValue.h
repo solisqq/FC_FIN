@@ -13,21 +13,16 @@ public:
 	FilterableValue(){}
 	List<Filter<Type>*> filters;
 	void update(Type val) {
-		if(filters.Count==0) {
-			value = val;
-			return;
-		}
+		if(filters.Count==0) {value = val;return;}
 		typename List<Filter<Type>*>::Node *current = filters.front;
-		if(current!=nullptr) {
-			filters.front->val->update(val);
+		filters.front->val->update(val);
+		current = current->next;
+		
+		while(current!=nullptr) {
+			current->val->update(current->prev->val->filtered);
 			current = current->next;
-
-			while(current!=nullptr) {
-				current->val->update(current->prev->val->filtered);
-				current = current->next;
-			}
-			value = filters.back->val->filtered;
 		}
+		value = filters.back->val->filtered;
 	}
 	void reset() {
 		typename List<Filter<Type>*>::Node *current = filters.front;
