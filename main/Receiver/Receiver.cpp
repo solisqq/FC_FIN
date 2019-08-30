@@ -38,9 +38,9 @@ void Receiver::update()
         Channels[i]->update(channel_length[i]);
     
     if(Yaw.get() < -Settings::RX::threshold) 
-        staticYaw+=(Yaw.get()+Settings::RX::threshold)/Settings::RX::yawDivider;
+        staticYaw-=(Yaw.get()+Settings::RX::threshold)/Settings::RX::yawDivider;
     else if(Yaw.get()> Settings::RX::threshold) 
-        staticYaw+=(Yaw.get()-Settings::RX::threshold)/Settings::RX::yawDivider;
+        staticYaw-=(Yaw.get()-Settings::RX::threshold)/Settings::RX::yawDivider;
 
     inactive = true;
 }

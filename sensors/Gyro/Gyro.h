@@ -7,7 +7,7 @@
 
 class Gyro : public Sensor3D, public DebugItem {
 private:
-    int accumulatedData[3];
+    int accumulatedData[3]={0,0,0};
     int counter=0;
 public:
     Gyro() {}
@@ -20,18 +20,18 @@ public:
             (accumulatedData[2]/counter)/Settings::Gyro::sensitivity
         );
         counter = 0;
+        for(int i=0; i<3; i++) accumulatedData[i] = 0;
         return converted;
     }
-    void setAvgFilter(int count) {
+    /*void setAvgFilter(int count) {
         Sensor3D::values.x.addFilter(new Average<int16_t>(count));
         Sensor3D::values.y.addFilter(new Average<int16_t>(count));
         Sensor3D::values.z.addFilter(new Average<int16_t>(count));
-    }
+    }*/
     virtual void updateByMPU(MPU9250 *mpu) {
         Vector<int16_t> gyroData;
 		mpu->readRawGyro(&gyroData);
-        update(&gyroData);
-
+        update(gyroData);
         accumulatedData[0]+=values.x.value;
         accumulatedData[1]+=values.y.value;
         accumulatedData[2]+=values.z.value;

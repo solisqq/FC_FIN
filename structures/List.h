@@ -37,16 +37,6 @@ public:
         newItem->prev = back;
         back->next = newItem;
         back = newItem;
-        return;
-    }
-    void FIFO(Type value) {
-        if(Count==0) return;
-        back->next = new Node(value);
-        back->next->prev = back;
-        back = back->next;
-        front = front->next;
-        delete front->prev;
-        front->prev = nullptr;
     }
     void popBack() {
         if(Count<=0) return;
@@ -60,7 +50,19 @@ public:
         backup->prev->next = nullptr;
         back = backup->prev;
         delete backup;
-        return;
+    }
+    void popFront() {
+        if(Count<=0) return;
+        Count--;
+        if(Count==0) {
+            delete front;
+            front = nullptr;
+            return;
+        }
+        front->next->prev = nullptr;
+        Node* backup = front->next;
+        delete front;
+        front = backup;
     }
     void erase() {
         Node* current = front;
@@ -73,22 +75,6 @@ public:
         front = nullptr;
         back = nullptr;
         Count = 0;
-    }
-    void popFront() {
-        if(Count<=1) {
-            if(Count==1) {
-                delete front;
-                front = nullptr;
-                Count=0;
-            }
-            return;
-        }
-        Count--;
-        front->next->prev = nullptr;
-        Node* backup = front->next;
-        delete front;
-        front = backup;
-        return;
     }
     Type getAndPopFront() {
         if(Count<=0) return (Type)0;

@@ -64,7 +64,7 @@ public:
     }
     void setThrottle() {
         if(currentState==State::Flying) {
-            Vector<float> pidV = _pid->run(_imu->eulers, _rx->getPoint3D()).getVector();
+            Vector<float> pidV = (_pid->run(_imu->gyroEulers, _rx->getPoint3D())).getVector();
             frontLeft.SetSpeed(max(_rx->Throttle.get() - pidV.y + pidV.x + pidV.z, Settings::Engines::start));
             frontRight.SetSpeed(max(_rx->Throttle.get() - pidV.y - pidV.x - pidV.z, Settings::Engines::start));
             backLeft.SetSpeed(max(_rx->Throttle.get() + pidV.y + pidV.x - pidV.z, Settings::Engines::start));

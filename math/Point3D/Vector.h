@@ -20,6 +20,7 @@ public:
 		Vector<Type> inverted(this->y * (-1), this->x * (-1), this->z);
 		return inverted;
 	}
+	void resetVals() {x = y = z = 0;}
 	Vector<Type> toRadians() { return (*this) * RAD_MULTI; }
 	virtual String toString()
 	{

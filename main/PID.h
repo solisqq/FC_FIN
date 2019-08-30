@@ -10,6 +10,7 @@
 #include "../utilities/Timer/DeltaTime.h"
 #include "../filters/SimpleIR.h"
 #include "../filters/ButterworthLP.h"
+#include "../filters/MovAverage.h"
 
 class PID : public DebugItem
 {
@@ -19,10 +20,13 @@ private:
 public:
     Point3D<float> values;
     Point3D<float> proportional;
-    Point3D<float> integral;
+    Vector<float> integral;
     Point3D<float> derivative;
     
     PID(/* args */) {
+        //proportional.x.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::PFilter));
+        //proportional.y.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::PFilter));
+        //proportional.z.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::PFilter));
         derivative.x.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
         derivative.y.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
         derivative.z.addFilter(new ButterworthLP<float>(Settings::PID::freq, Settings::PID::DFilter));
@@ -35,14 +39,14 @@ public:
         error = desired.getVector() - current;
         
         proportional.updateAll(error*Settings::PID::P);
-        integral.updateAll((error*dt)*Settings::PID::I);
+        integral = integral + ((error*dt)*Settings::PID::I);
         derivative.updateAll(((error-preError)/dt)*Settings::PID::D);
         
         preError = error;
 
-        values.x.update(proportional.x.value + integral.x.value + derivative.x.value);
-        values.y.update(proportional.y.value + integral.y.value + derivative.y.value);
-        values.z.update(proportional.z.value + integral.z.value + derivative.z.value);
+        values.x.update(proportional.x.value + integral.x + derivative.x.value);
+        values.y.update(proportional.y.value + integral.y + derivative.y.value);
+        values.z.update(proportional.z.value + integral.z + derivative.z.value);
         return values;
     }
     void reset() {
@@ -51,7 +55,7 @@ public:
         derivative.resetVals();
         values.resetVals();
     }
-    Point3D<float> run(Point3D<float> current, Point3D<float> desired) {return run(current.getVector(), desired);}
+    //Point3D<float> run(Point3D<float> current, Point3D<float> desired) {return run(current.getVector(), desired);}
     virtual String getClassName() {return "PID";}
     virtual String getDebugMsg(bool raw=false) {
         String msg = getClassName()+": " + values.toString();

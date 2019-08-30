@@ -358,7 +358,7 @@ int MPU9250::setSrd(uint8_t srd) {
 }
 bool MPU9250::isDataReady() {
   readRegisters(0x3A, 1, _buffer);
-  if(_buffer & 1 == 1) return true;
+  if((_buffer[0] & 1) == 1) return true;
   return false;
 }
 /* enables the data ready interrupt */

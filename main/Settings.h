@@ -20,6 +20,7 @@ public:
         static Vector<float> I;
         static Vector<float> D;
         static float DFilter;
+        static float PFilter;
         static String toString();
     };
     class Gyro
@@ -89,9 +90,9 @@ public:
 };
 
 float Settings::Gyro::cutOff = 70.0;
-int Settings::Gyro::freq = 8000;
+int Settings::Gyro::freq = 4000;
 int Settings::Gyro::calibThreshold = 80;//100
-float Settings::Gyro::sensitivity = 120.0;
+float Settings::Gyro::sensitivity = 140.0;
 
 float Settings::Accel::cutOff = 4.0;
 int Settings::Accel::freq = 1000;
@@ -117,13 +118,14 @@ float Settings::PID::dt = 1.0/Settings::PID::freq;
 //Vector<float> Settings::PID::P = Vector<float>(2.5, 2.5, 1.5);
 Vector<float> Settings::PID::P = Vector<float>(0.0, 0.0, 0.0);
 Vector<float> Settings::PID::I = Vector<float>(0.0, 0.0, 0.0);
-Vector<float> Settings::PID::D = Vector<float>(1.0, 1.0, 1.0);
-float Settings::PID::DFilter = 140;
+Vector<float> Settings::PID::D = Vector<float>(1.5, 1.5, 1.0);
+float Settings::PID::DFilter = 80;
+float Settings::PID::PFilter = 50;
 
 float Settings::Math::constPI = 3.14159265358979323846;
 
 float Settings::IMU::gyroStr = 0.9996;
-int Settings::IMU::calibTime = 150;//150
+int Settings::IMU::calibTime = 100;//150
 
 int Settings::Engines::minimum = 1148;
 int Settings::Engines::maximum = 1832;
@@ -153,6 +155,7 @@ void Settings::readFromFile(String settings) {
     Settings::Accel::cutOff = data.getAndPopFront().toFloat();
     Settings::Gyro::cutOff = data.getAndPopFront().toFloat();
     Settings::IMU::gyroStr = data.getAndPopFront().toFloat();
+    Settings::PID::PFilter = data.getAndPopFront().toFloat();
 }
 
 String Settings::PID::toString() {
@@ -177,6 +180,7 @@ String Settings::getSettingsFileString() {
     toRet+=(String)Settings::Accel::cutOff+'\n';
     toRet+=(String)Settings::Gyro::cutOff+'\n';
     toRet+=(String)Settings::IMU::gyroStr+'\n';
+    toRet+=(String)Settings::PID::PFilter+'\n';
     return toRet;
 }
 #endif

@@ -57,7 +57,7 @@ public:
         } else if(type==Type::dbll) {
             *dbl = params.front->val.toDouble();
         }
-        memory->writeSettings(cSPI, Settings::getSettingsFileString());
+        //memory->writeSettings(cSPI, Settings::getSettingsFileString());
     }
 };
 
