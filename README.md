@@ -1,5 +1,5 @@
 # Hawk FC
-## DISCONTINUED - new project at [HawkRC](github.com/solisqq/HawkRC)
+## DISCONTINUED - new project at [HawkRC](https://github.com/solisqq/HawkRC)
 ### Features
 - 8kHz gyro loop, 1kHz PID loop
 - Written in OOP standard
