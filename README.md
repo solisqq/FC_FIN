@@ -1,6 +1,5 @@
 # Hawk FC
-## ESP32 Flight Controller
-
+## DISCONTINUED - new project at [HawkRC](github.com/solisqq/HawkRC)
 ### Features
 - 8kHz gyro loop, 1kHz PID loop
 - Written in OOP standard
